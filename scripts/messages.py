@@ -37,7 +37,12 @@ async def handler_msg_reply(message: types.Message) -> None:
     # reply message using gemini AI
     replied_msg = None
     if (bot_usn in message.text):
-        replied_msg = model.generate_content(prompts.reply_message_from_user(message_from_user))
+        is_reply_from_someone = message.reply_to_message
+        if is_reply_from_someone:
+            prev_context = message.reply_to_message.text
+            replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, prev_context))
+        else:
+            replied_msg = model.generate_content(prompts.reply_message_from_user(message_from_user))
     elif is_replying_bot:
         prev_context = message.reply_to_message.text
         replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, prev_context))
