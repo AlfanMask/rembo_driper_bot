@@ -15,8 +15,8 @@ group_chat_id = os.getenv("GROUP_CHAT_ID")
 
 async def worker() -> None:
     try:
-        # give motivation on drivers group each peak hours (7, 12, 19)
-        peak_hours = [datetime.time(7, 0), datetime.time(12, 0), datetime.time(19, 0)]
+        # give motivation on drivers group each peak hours (7, 12, 15, 19)
+        peak_hours = [datetime.time(7, 0), datetime.time(12, 0), datetime.time(15, 0), datetime.time(19, 0)]
         for peak_hour in peak_hours:
             start_time = datetime.datetime.combine(datetime.datetime.today(), peak_hour)
             end_time = start_time + datetime.timedelta(hours=1)
