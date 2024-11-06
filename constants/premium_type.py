@@ -1,0 +1,5 @@
+class PREMIUM:
+    ANON = 'ANON'
+    MENFESS = 'MENFESS'
+    BOTH = 'BOTH'
+    DRIVER = 'DRIVER'

@@ -1,0 +1,152 @@
+@startuml
+'compile at https://www.plantuml.com/plantuml/
+
+entity "User" as e01 {
+    *id : number <<generated>>
+    --
+    *user_id : uuid
+    username : text
+    gender : text
+    age : number
+    univ : text
+    faculty : text
+    *lang : string
+    partner_gender: string
+    partner_faculty: string
+    room_id : text
+    num_typed_banned_words : int
+    created_at : timestamp
+    last_active: timestamp
+    input_state : string
+    shared_referrals: int
+    referral_id: string
+    special_quota: int = 3
+    mager_quota: int = 3
+    premium_to: timestamp
+    is_admin : boolean = false
+    first_name : string
+    last_name : string
+    validated : boolean = false
+    notified = timestamp
+    mager_posts_to_prem = int
+    got_premium_mager_curweek = boolean
+    comment_points = int
+    premium_type = string
+    num_rooms = int
+}
+
+entity "Room" as e02 {
+    *id : number <<generated>>
+    --
+    *room_id : uuid
+    *univ : text
+    user1_id : text
+    user2_id : text
+    started_at : timestamp
+    end_at : timestamp
+}
+
+entity "Blacklist" as e03 {
+    *id : number <<generated>>
+    --
+    *user_id : text
+    created_at : timestamp
+}
+
+entity "Fess" as e04 {
+    *id : number <<generated>>
+    --
+    *user_id : text
+    message : text
+    univ : text
+    link : text
+    created_at : timestamp
+    deleted : boolean
+    pinned : boolean
+}
+
+entity "Mager" as e05 {
+    *id : number <<generated>>
+    --
+    *user_id : text
+    message : text
+    type : text
+    *univ : text
+    link : text
+    created_at : timestamp
+    is_closed : boolean = false
+    deleted : boolean
+    pinned : boolean
+}
+
+entity "Friend" as e06 {
+    *id : number <<generated>>
+    --
+    *user_id : text
+    message : text
+    type : text
+    univ : text
+    link : text
+    created_at : timestamp
+    deleted : boolean
+    pinned : boolean
+}
+
+entity "Delvotes" as e07 {
+    *id : number <<generated>>
+    --
+    *type : text
+    *univ : text
+    *link : text
+    *user_id : text
+    *sender_id : text
+    *created_at : timestamp
+}
+
+entity "Messages" as e08 {
+    *id : number <<generated>>
+    --
+    *user_id : number
+    *room_id : text
+    *message_id : number
+    message_text : text // for text or media caption
+    media_id : text // for media if there is no caption
+    *created_at : timestamp
+}
+
+entity "Ratings" as e09 {
+    *id : number <<generated>>
+    --
+    *rater_id : text
+    *driver_id : text
+    *type : text
+    *point : number
+    created_at : timestamp
+}
+
+entity "Drivers" as e010 {
+    *id : number <<generated>>
+    --
+    *driver_id : text
+    *username : text
+    *phone_num : text
+    created_at : timestamp
+}
+
+entity "Notifications" as e011 {
+    *id : number <<generated>>
+    --
+    *bot : text
+    *type : text
+    *receiver_id : number
+    message : text
+    *is_done : boolean = False
+    created_at : timestamp
+}
+
+e01 }|..|| e02
+e01 }|..|| e03
+e01 }|..|| e04
+e01 }|..|| e05
+e01 }|..|| e06
+@enduml
