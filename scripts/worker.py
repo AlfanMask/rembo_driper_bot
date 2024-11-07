@@ -1,17 +1,6 @@
-import logging, datetime, schedule
-import time
-from dotenv import load_dotenv
-
-from constants import numbers, premium_type, prompts
+import logging, datetime
+from helper import gemini
 # from instances.db import db
-from instances.bot import bot
-from instances.gemini_ai import model
-
-# load all env variables
-load_dotenv()
-import os
-# setup gemini ai instance
-group_chat_id = os.getenv("GROUP_CHAT_ID")
 
 async def worker() -> None:
     try:
@@ -19,15 +8,9 @@ async def worker() -> None:
         peak_hours = [datetime.time(7, 0), datetime.time(12, 0), datetime.time(15, 0), datetime.time(19, 0)]
         for peak_hour in peak_hours:
             start_time = datetime.datetime.combine(datetime.datetime.today(), peak_hour)
-            end_time = start_time + datetime.timedelta(hours=1)
+            end_time = start_time + datetime.timedelta(minutes=10)
             if is_now_between(start_time, end_time):
-                response = model.generate_content(prompts.active_driver_motivation)
-                await bot.send_message(
-                    chat_id=group_chat_id,
-                    text=response.text,
-                    parse_mode="Markdown",
-                    request_timeout=300,
-                )
+                await gemini.send_motivation()
         
     except Exception as e:
         print(f"error: {e}")

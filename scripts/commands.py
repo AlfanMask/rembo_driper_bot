@@ -17,6 +17,7 @@ from instances.logger import bot_logger
 from scripts import keyboards
 from constants import lang, prompts, input_state
 from scripts.worker import worker
+from helper import gemini
 
 """
 ## ADMIN commands
@@ -30,12 +31,14 @@ ticking_task = None  # To keep track of the background task
 async def tick_counter():
     global ticking_number_in_second
     while True:
-        await asyncio.sleep(10)
-        ticking_number_in_second += 10
+        await asyncio.sleep(1)
+        ticking_number_in_second += 1
+        print(ticking_number_in_second)
         
         # run worker function
         # reset ticking_number_in_second
-        if ticking_number_in_second >= 3600:
+        # TODO: change into 600
+        if ticking_number_in_second >= 10:
             await worker()
             ticking_number_in_second = 0
             
@@ -51,3 +54,9 @@ async def start_command(message: Message):
         ticking_task = asyncio.create_task(tick_counter())
     
     await message.answer("Haloo, Rembo di sini kukuruyuukk..")
+    
+# Give Motivation Directly
+@dp.message(Command("motivation"))
+async def motivation(message: Message):
+    await gemini.send_motivation()
+    await message.reply(text="Motivation Sent to the group!")
