@@ -27,6 +27,7 @@ if __name__ == "__main__":
     # log starting bot process
     bot_logger.info(f"{datetime.datetime.now()} - Starting bot...")
     print("Starting bot...")
+    print(datetime.datetime.now())
     
     # run main function
     logging.basicConfig(level=logging.INFO, stream=sys.stdout)
