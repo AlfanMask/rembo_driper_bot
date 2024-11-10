@@ -51,4 +51,5 @@ async def handler_msg_reply(message: types.Message) -> None:
             prev_context = message.reply_to_message.text
             replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, prev_context, is_admin))
         
-        await message.reply(replied_msg.text, parse_mode="Markdown")
+        if replied_msg != None:
+            await message.reply(replied_msg.text, parse_mode="Markdown")
