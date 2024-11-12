@@ -29,6 +29,7 @@ admin_id = os.getenv("ADMIN_ID")
 async def handler_msg_reply(message: types.Message) -> None:
     message_type: str = message.chat.type
     is_admin = True if message.from_user.id == int(admin_id) else False
+    user_firstname: str = message.from_user.first_name
     if message_type in ["group", "supergroup"]:
         # get message from user
         message_from_user = message.text.replace(bot_usn, "")
@@ -44,12 +45,12 @@ async def handler_msg_reply(message: types.Message) -> None:
             is_reply_from_someone = message.reply_to_message
             if is_reply_from_someone:
                 prev_context = message.reply_to_message.text
-                replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, prev_context, is_admin))
+                replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, prev_context, is_admin, user_firstname))
             else:
-                replied_msg = model.generate_content(prompts.reply_message_from_user(message_from_user, is_admin))
+                replied_msg = model.generate_content(prompts.reply_message_from_user(message_from_user, is_admin, user_firstname))
         elif is_replying_bot:
             prev_context = message.reply_to_message.text
-            replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, prev_context, is_admin))
+            replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, prev_context, is_admin, user_firstname))
         
         if replied_msg != None:
             await message.reply(replied_msg.text, parse_mode="Markdown")
