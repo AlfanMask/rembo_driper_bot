@@ -24,13 +24,28 @@ import os
 bot_usn = os.getenv("BOT_USERNAME")
 admin_id = os.getenv("ADMIN_ID")
 
+
+# messages history context: 10 of latest request (5) and response (5) data as context reference
+global history_context
+history_context: list[str] = []
+global last_update_history
+last_update_history = datetime.datetime.now()
+
 # handle bot to reply message
 @dp.message()
 async def handler_msg_reply(message: types.Message) -> None:
+    # if last_update_history > 5 minutes -> clear history_context
+    global history_context
+    global last_update_history
+    if datetime.datetime.now() - last_update_history > datetime.timedelta(minutes=5):
+        history_context = []
+    
     message_type: str = message.chat.type
     is_admin = True if message.from_user.id == int(admin_id) else False
     user_id: int = message.from_user.id
     nickname = drivers.nicknames.get(user_id)
+    if nickname == None:
+        nickname = "kak"
     
     if message_type in ["group", "supergroup"]:
         # get message from user
@@ -47,12 +62,29 @@ async def handler_msg_reply(message: types.Message) -> None:
             is_reply_from_someone = message.reply_to_message
             if is_reply_from_someone:
                 prev_context = message.reply_to_message.text
-                replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, prev_context, is_admin, nickname))
+                replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, history_context, prev_context, is_admin, nickname))
             else:
-                replied_msg = model.generate_content(prompts.reply_message_from_user(message_from_user, is_admin, nickname))
+                replied_msg = model.generate_content(prompts.reply_message_from_user(message_from_user, history_context, is_admin, nickname))
         elif is_replying_bot:
             prev_context = message.reply_to_message.text
-            replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, prev_context, is_admin, nickname))
+            replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, history_context, prev_context, is_admin, nickname))
         
         if replied_msg != None:
             await message.reply(replied_msg.text, parse_mode="Markdown")
+            await update_history_ctx(message_from_user)
+            await update_history_ctx(replied_msg.text)
+            
+
+async def update_history_ctx(text: str) -> None:
+    global history_context
+    global last_update_history
+
+    # put message to history context
+    history_context.append(text)
+
+    # delete first item if lenght >= 10
+    if len(history_context) > 10:
+        del history_context[0]
+        
+    # update history timestamp
+    last_update_history = datetime.datetime.now()
