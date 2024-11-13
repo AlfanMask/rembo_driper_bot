@@ -1,16 +1,16 @@
 import logging, datetime
 from helper import gemini
+from constants import peak_hours
 # from instances.db import db
 
 async def worker() -> None:
     try:
-        # give motivation on drivers group each peak hours (7, 12, 15, 19)
-        peak_hours = [datetime.time(6, 30), datetime.time(12, 0), datetime.time(15, 0), datetime.time(19, 0)]
-        for peak_hour in peak_hours:
+        # give motivation on drivers group each peak hours
+        for peak_hour in peak_hours.ph_list.values():
             start_time = datetime.datetime.combine(datetime.datetime.today(), peak_hour)
             end_time = start_time + datetime.timedelta(minutes=10)
             if is_now_between(start_time, end_time):
-                await gemini.send_motivation()
+                await gemini.send_motivation(peak_hour)
         
     except Exception as e:
         print(f"error: {e}")

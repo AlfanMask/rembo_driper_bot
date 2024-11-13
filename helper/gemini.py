@@ -9,9 +9,9 @@ from constants import prompts
 # setup gemini ai instance
 group_chat_id = os.getenv("GROUP_CHAT_ID")
 
-async def send_motivation():
+async def send_motivation(peak_hour_ctx: any=None):
     try:
-        response = model.generate_content(prompts.active_driver_motivation)
+        response = model.generate_content(prompts.active_driver_motivation(peak_hour_ctx))
         await bot.send_message(
             chat_id=group_chat_id,
             text=response.text,

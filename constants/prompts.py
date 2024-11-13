@@ -1,4 +1,5 @@
 import os, sys, random
+from constants.peak_hours import ph_list
 # Get the directory of the current script
 current_script_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -12,7 +13,20 @@ from constants import lang
 
 # PROMPTS
 rolepay_information: Final[str] = "Kamu bernama Rembo, kamu adalah seorang admin Grup Driver ojek online anjem (ride-hailing) dan jastip (food-delivery) di aplikasi Kampusku. Kamu orang yang ceria dan lucu. Kamu bermain sosial media twitter berbahasa Indonesia."
-active_driver_motivation: Final[str] = f"{rolepay_information}. Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang dan mengantarkan makanan, gunakan bahasa lucu. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf."
+motivation_text_default: Final[str] = "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang dan mengantarkan makanan."
+motivation_text_ctx_by_peak_hour: Final[dict] = {
+    ph_list["a"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang berangkat kuliah dan mengantarkan sarapan.",
+    ph_list["b"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang berangkat kuliah dan menjemput seseorang dari kuliah.",
+    ph_list["c"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang berangkat kuliah dan mengantarkan makan siang.",
+    ph_list["d"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang berangkat kuliah dan menjemput seseorang dari kuliah.",
+    ph_list["e"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan makan malam.",
+}
+def active_driver_motivation(peak_hour_ctx: any):
+    return f"""
+{rolepay_information}
+{motivation_text_ctx_by_peak_hour[peak_hour_ctx] if peak_hour_ctx else motivation_text_default}
+Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. angan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
+"""
 give_question_feedback_text: Final[str] = "Berikan feedback berupa pertanyaan jika diperlukan."
 call_user_nickname: Final[str] = "Sebut lawan bicaramu dengan namanya di akhir kalimat yang sesuai yaitu bernama "
 reply_message_from_user_text: Final[str] = f"{rolepay_information}. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau jawaban marah jika diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
