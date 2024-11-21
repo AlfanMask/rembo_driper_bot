@@ -21,3 +21,16 @@ async def send_motivation(peak_hour_ctx: any=None):
     except Exception as e:
         print(f"error: {e}")
         logging.error(f"{datetime.datetime.now()} - Error: {e}")
+        
+async def announce_many_orders_dont_get_driver():
+    try:
+        response = model.generate_content(prompts.many_orders_dont_get_driver())
+        await bot.send_message(
+            chat_id=group_chat_id,
+            text=response.text,
+            parse_mode="Markdown",
+            request_timeout=300,
+        )
+    except Exception as e:
+        print(f"error: {e}")
+        logging.error(f"{datetime.datetime.now()} - Error: {e}")

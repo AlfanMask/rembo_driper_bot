@@ -32,11 +32,19 @@ motivation_text_ctx_by_peak_hour: Final[dict] = {
     ph_list["d"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang berangkat kuliah dan menjemput seseorang dari kuliah.",
     ph_list["e"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan makan malam.",
 }
+motivation_many_orders_dont_get_driver_text: Final[str] = "Di grup ada banyak orderan yang belum diambil oleh driver. Berikan pesan semangat kepada para driver lainnya untuk online dan segera mengambil orderan tersebut."
 def active_driver_motivation(peak_hour_ctx: any):
     return f"""
 {rolepay_information}
 {motivation_text_ctx_by_peak_hour[peak_hour_ctx] if peak_hour_ctx else motivation_text_default}
-Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. angan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
+Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
+"""
+
+def many_orders_dont_get_driver():
+    return f"""
+{rolepay_information}
+{motivation_many_orders_dont_get_driver_text}
+Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
 """
 
 # REPLYING

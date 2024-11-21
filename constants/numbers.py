@@ -20,3 +20,4 @@ week_of_prem_reward_mager_and_comment_reached: int = 1
 num_default_bid_quota: int = 7
 num_quota_bid_for_new_drivers: int = 250
 num_quota_bid_premium_each_week: int = 250
+num_many_ordes_dont_get_driver: int = 5
