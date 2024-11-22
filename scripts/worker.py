@@ -3,8 +3,19 @@ from helper import gemini
 from constants import peak_hours
 from instances.client import client
 
+# For ticking check alraedy more then 1H
+# for many orders dont get drivers so bot can announce to the group, but only once per hour (6 times of worker run. each worker run = 10 minutes)
+global ticking_number_worker_run
+ticking_number_worker_run: int = 0
+global is_sent_motivation_is_many_orders_dont_get_driver
+is_sent_motivation_is_many_orders_dont_get_driver: bool = False
+
+# worker will run every 10 minutes
 async def worker() -> None:
     try:
+        global ticking_number_worker_run
+        global is_sent_motivation_is_many_orders_dont_get_driver
+        
         # give motivation on drivers group each peak hours
         for peak_hour in peak_hours.ph_list.values():
             start_time = datetime.datetime.combine(datetime.datetime.today(), peak_hour)
@@ -15,8 +26,19 @@ async def worker() -> None:
 
         # checking if there is many orders don't get drivers -> announce to drivers group
         is_many_orders_dont_get_driver = client.magers.get.is_many_orders_dont_get_driver()
-        if is_many_orders_dont_get_driver:
+        if is_many_orders_dont_get_driver and not is_sent_motivation_is_many_orders_dont_get_driver:
             await gemini.announce_many_orders_dont_get_driver()
+            is_sent_motivation_is_many_orders_dont_get_driver = True
+            ticking_number_worker_run = 0
+            return
+        
+        # count how many times the worker run
+        # if more then 6 times -> reset value of is_sent_motivation_is_many_orders_dont_get_driver so then able to send another motivation after already 1H
+        if ticking_number_worker_run < 6:
+            ticking_number_worker_run += 1
+        else:
+            is_sent_motivation_is_many_orders_dont_get_driver = False
+            ticking_number_worker_run = 0
         
     except Exception as e:
         print(f"error: {e}")
