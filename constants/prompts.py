@@ -47,6 +47,15 @@ def many_orders_dont_get_driver():
 Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
 """
 
+motivation_anjem_dont_get_driver: Final[str] = "Di grup orderan antar jemput (anjem) yang belum diambil oleh driver. Berikan pesan semangat kepada para driver lainnya untuk online dan segera mengambil orderan tersebut."
+def anjem_dont_get_driver(order_msg: str):
+    return f"""
+{rolepay_information}
+{motivation_anjem_dont_get_driver}
+Pesan orderan: {order_msg}
+Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
+"""
+
 # REPLYING
 give_question_feedback_text: Final[str] = "Berikan feedback berupa pertanyaan."
 call_user_nickname: Final[str] = "Jangan sebut lawan bicaramu dengan penyebutan nama dari history percakapan sebelumnya, jangan sebut lawan bicaramu dengan penyebutan kak atau bos seperti history percakapan sebelumnya, tapi sebut lawan bicaramu dengan namanya di akhir kalimat dengan baik dengan nama yaitu "

@@ -34,3 +34,16 @@ async def announce_many_orders_dont_get_driver():
     except Exception as e:
         print(f"error: {e}")
         logging.error(f"{datetime.datetime.now()} - Error: {e}")
+        
+async def announce_anjem_dont_get_driver(link: str, order_msg: str):
+    try:
+        response = model.generate_content(prompts.anjem_dont_get_driver(order_msg))
+        await bot.send_message(
+            chat_id=group_chat_id,
+            text=f"{response.text}\nLink: {link}",
+            parse_mode="Markdown",
+            request_timeout=300,
+        )
+    except Exception as e:
+        print(f"error: {e}")
+        logging.error(f"{datetime.datetime.now()} - Error: {e}")
