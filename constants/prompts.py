@@ -10,6 +10,7 @@ sys.path.insert(0, project_root)
 
 from typing import Final
 from constants import lang
+from helper import time
 
 # helper
 def get_context_history(history_context: list[str]) -> str:
@@ -34,25 +35,31 @@ motivation_text_ctx_by_peak_hour: Final[dict] = {
 }
 motivation_many_orders_dont_get_driver_text: Final[str] = "Di grup ada banyak orderan yang belum diambil oleh driver. Berikan pesan semangat kepada para driver lainnya untuk online dan segera mengambil orderan tersebut."
 def active_driver_motivation(peak_hour_ctx: any):
+    (hari, waktu) = time.get_day_time_indonesian()
     return f"""
 {rolepay_information}
 {motivation_text_ctx_by_peak_hour[peak_hour_ctx] if peak_hour_ctx else motivation_text_default}
+Waktu sekarang adalah: {hari}, {waktu}
 Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
 """
 
 def many_orders_dont_get_driver():
+    (hari, waktu) = time.get_day_time_indonesian()
     return f"""
 {rolepay_information}
 {motivation_many_orders_dont_get_driver_text}
+Waktu sekarang adalah: {hari}, {waktu}
 Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
 """
 
 motivation_anjem_dont_get_driver: Final[str] = "Di grup orderan antar jemput (anjem) yang belum diambil oleh driver. Berikan pesan semangat kepada para driver lainnya untuk online dan segera mengambil orderan tersebut."
 def anjem_dont_get_driver(order_msg: str):
+    (hari, waktu) = time.get_day_time_indonesian()
     return f"""
 {rolepay_information}
 {motivation_anjem_dont_get_driver}
 Pesan orderan: {order_msg}
+Waktu sekarang adalah: {hari}, {waktu}
 Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
 """
 
