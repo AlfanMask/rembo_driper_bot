@@ -65,8 +65,9 @@ Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter.
 
 # REPLYING
 give_question_feedback_text: Final[str] = "Berikan feedback berupa pertanyaan."
+dont_give_question_feedback_text: Final[str] = "Jangan memberikan pertanyaan kepada lawan bicara. Jangan gunakan tanda tanya."
 call_user_nickname: Final[str] = "Jangan sebut lawan bicaramu dengan penyebutan nama dari history percakapan sebelumnya, jangan sebut lawan bicaramu dengan penyebutan kak atau bos seperti history percakapan sebelumnya, tapi sebut lawan bicaramu dengan namanya di akhir kalimat dengan baik dengan nama yaitu "
-change_topic: Final[str] = "Jika seseorang ingin mengganti topik atau bahasan, maka gantilah topik. Jangan menggunakan topik bahasan dari history percakapan sebelumnya."
+# TODO: this cannot change topic properly, it will cause the bot to always giving question always and always that is not good. change_topic: Final[str] = "Jika seseorang ingin mengganti topik atau bahasan, maka gantilah topik dan jangan menggunakan topik bahasan dari history percakapan sebelumnya."
 dont_repeat_question_from_user: Final[str] = "Jangan sebut ulang pesan dari seseorang."
 reply_message_from_user_text: Final[str] = f"{rolepay_information}. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
 reply_message_from_admin_text_respectfully: Final[str] = f"{rolepay_information}. Tanggapilah pesan di bawah ini dengan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
@@ -77,11 +78,10 @@ def reply_message_from_user(message: str, history_context: list[str], is_admin: 
         is_calling_nickname = True
     history_content_formatted = get_context_history(history_context)
     return f"""
-{reply_message_from_admin_text_respectfully if is_admin else reply_message_from_user_text}{give_question_feedback_text if is_giving_feedback_question else ""}
+{reply_message_from_admin_text_respectfully if is_admin else reply_message_from_user_text}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
 {f'Perhatikan konteks history percakapan. Konteks history percakapan: {history_content_formatted}' if {len(history_context) > 0} else ''}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
 Pesan: {message}
 {dont_repeat_question_from_user}
-{change_topic}
 """
 reply_message_from_user_on_replying_prev_context_text: Final[str] = f"{rolepay_information}. Seseorang me-reply komenanmu sebelumnya. Tanggapilah reply dari orang tersebut dengan memperhatikan konteks history percakapan. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
 reply_message_from_admin_on_replying_prev_context_text_respectfully: Final[str] = f"{rolepay_information}. Atasan kamu me-reply komenanmu sebelumnya. Tanggapilah reply dari atasan kamu tersebut dengan memperhatikan konteks history percakapan, gunakan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
@@ -92,9 +92,8 @@ def reply_message_from_user_on_replying_prev_context(message: str, history_conte
         is_calling_nickname = True
     history_content_formatted = get_context_history(history_context)
     return f"""
-{reply_message_from_admin_on_replying_prev_context_text_respectfully if is_admin else reply_message_from_user_on_replying_prev_context_text}{give_question_feedback_text if is_giving_feedback_question else ""}
+{reply_message_from_admin_on_replying_prev_context_text_respectfully if is_admin else reply_message_from_user_on_replying_prev_context_text}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
 {f'Konteks history percakapan: {history_content_formatted}. Pesan kamu yang di-reply seseorang: {prev_context}.' if {len(history_context) > 0} else f'Konteks komen kamu sebelumnya: {prev_context}'}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
 Reply baru seseorang: {message}
 {dont_repeat_question_from_user}
-{change_topic}
 """
