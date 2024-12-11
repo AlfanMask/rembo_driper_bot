@@ -71,7 +71,7 @@ dont_repeat_question_from_user: Final[str] = "Jangan sebut ulang pesan dari sese
 reply_message_from_user_text: Final[str] = f"{rolepay_information}. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
 reply_message_from_admin_text_respectfully: Final[str] = f"{rolepay_information}. Tanggapilah pesan di bawah ini dengan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
 def reply_message_from_user(message: str, history_context: list[str], is_admin: bool, nickname: str) -> str:
-    is_giving_feedback_question = random.choice([True, False])
+    is_giving_feedback_question = random.choices([True, False], weights=[30, 60], k=1)[0]
     is_calling_nickname = random.choices([True, False], weights=[60, 30], k=1)[0]
     if is_admin:
         is_calling_nickname = True
@@ -86,7 +86,7 @@ Pesan: {message}
 reply_message_from_user_on_replying_prev_context_text: Final[str] = f"{rolepay_information}. Seseorang me-reply komenanmu sebelumnya. Tanggapilah reply dari orang tersebut dengan memperhatikan konteks history percakapan. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
 reply_message_from_admin_on_replying_prev_context_text_respectfully: Final[str] = f"{rolepay_information}. Atasan kamu me-reply komenanmu sebelumnya. Tanggapilah reply dari atasan kamu tersebut dengan memperhatikan konteks history percakapan, gunakan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
 def reply_message_from_user_on_replying_prev_context(message: str, history_context: list[str], prev_context: str, is_admin: bool, nickname: str) -> str:
-    is_giving_feedback_question = random.choice([True, False])
+    is_giving_feedback_question = random.choices([True, False], weights=[30, 60], k=1)[0]
     is_calling_nickname = random.choices([True, False], weights=[60, 30], k=1)[0]
     if is_admin:
         is_calling_nickname = True
