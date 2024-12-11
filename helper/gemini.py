@@ -37,7 +37,7 @@ async def announce_many_orders_dont_get_driver():
         
 async def announce_anjem_dont_get_driver(link: str, order_msg: str):
     try:
-        response = model.generate_content(prompts.anjem_dont_get_driver(order_msg))
+        response = model.generate_content(prompts.anjem_dont_get_driver(order_msg.replace("#ANJEM","")))
         await bot.send_message(
             chat_id=group_chat_id,
             text=f"{response.text}\nLink: {link}",
