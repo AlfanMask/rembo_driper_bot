@@ -42,7 +42,7 @@ class Client:
                 conn = db.connect()
                 cursor = conn.cursor()
                 
-                cursor.execute(f"SELECT COUNT(id) FROM magers WHERE (type LIKE '%#ANJEM%' OR type LIKE '%#JASTIP%') AND deleted = 0 AND num_comments IS NULL AND is_closed = 0 AND created_at >= NOW() - INTERVAL 1 HOUR")
+                cursor.execute(f"SELECT COUNT(id) FROM magers WHERE univ='UNS' AND (type LIKE '%#ANJEM%' OR type LIKE '%#JASTIP%') AND deleted = 0 AND num_comments IS NULL AND is_closed = 0 AND created_at >= NOW() - INTERVAL 1 HOUR")
                 result = cursor.fetchone()
 
                 if result[0] >= numbers.num_many_ordes_dont_get_driver:
@@ -53,7 +53,18 @@ class Client:
                 conn = db.connect()
                 cursor = conn.cursor()
                 
-                cursor.execute(f"SELECT link, message FROM magers WHERE type LIKE '%#ANJEM%' AND is_reminded = 0 AND num_comments IS NULL AND is_closed = 0 AND (created_at BETWEEN NOW() - INTERVAL 1 HOUR AND NOW() - INTERVAL 10 MINUTE) ORDER BY id ASC LIMIT 1")
+                cursor.execute(f"SELECT link, message FROM magers WHERE univ='UNS' AND type LIKE '%#ANJEM%' AND is_reminded = 0 AND num_comments IS NULL AND is_closed = 0 AND (created_at BETWEEN NOW() - INTERVAL 1 HOUR AND NOW() - INTERVAL 10 MINUTE) ORDER BY id ASC LIMIT 1")
+                result = cursor.fetchone()
+
+                if result:
+                    return (result[0], result[1])
+                return (None, None)
+                        
+            def newest_anjem_ums_dont_get_drivers_link() -> tuple[str, str]:
+                conn = db.connect()
+                cursor = conn.cursor()
+                
+                cursor.execute(f"SELECT link, message FROM magers WHERE univ='UMS' AND type LIKE '%#ANJEM%' AND is_reminded = 0 AND num_comments IS NULL AND is_closed = 0 AND (created_at BETWEEN NOW() - INTERVAL 1 HOUR AND NOW() - INTERVAL 10 MINUTE) ORDER BY id ASC LIMIT 1")
                 result = cursor.fetchone()
 
                 if result:

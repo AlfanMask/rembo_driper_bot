@@ -1,6 +1,6 @@
 import logging, datetime
 from helper import gemini
-from constants import peak_hours
+from constants import peak_hours, univs
 from instances.client import client
 
 # For ticking check alraedy more then 1H
@@ -24,13 +24,20 @@ async def worker() -> None:
                 await gemini.send_motivation(peak_hour)
                 return #stop the function so not giving multiple motivation as below
 
-        # FOR NOW: only for uns campus
+        # for UNS campus
         (anjem_uns_dont_get_drivers_link, order_msg) = client.magers.get.newest_anjem_uns_dont_get_drivers_link()
         if anjem_uns_dont_get_drivers_link:
-            await gemini.announce_anjem_dont_get_driver(anjem_uns_dont_get_drivers_link, order_msg)
+            await gemini.announce_anjem_dont_get_driver(anjem_uns_dont_get_drivers_link, order_msg, univs.uns)
             client.magers.update.set_is_reminded_true_by_link(anjem_uns_dont_get_drivers_link)
+            
+        # for UMS campus
+        (anjem_ums_dont_get_drivers_link, order_msg) = client.magers.get.newest_anjem_ums_dont_get_drivers_link()
+        if anjem_ums_dont_get_drivers_link:
+            await gemini.announce_anjem_dont_get_driver(anjem_ums_dont_get_drivers_link, order_msg, univs.ums)
+            client.magers.update.set_is_reminded_true_by_link(anjem_ums_dont_get_drivers_link)
 
         # checking if there is many orders don't get drivers -> announce to drivers group
+        # FOR NOW: only for uns
         is_many_orders_dont_get_driver = client.magers.get.is_many_orders_dont_get_driver()
         if is_many_orders_dont_get_driver and not is_sent_motivation_is_many_orders_dont_get_driver:
             await gemini.announce_many_orders_dont_get_driver()
