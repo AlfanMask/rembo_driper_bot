@@ -71,7 +71,11 @@ call_user_nickname: Final[str] = "Jangan sebut lawan bicaramu dengan penyebutan 
 dont_repeat_question_from_user: Final[str] = "Jangan sebut ulang pesan dari seseorang."
 reply_message_from_user_text: Final[str] = f"{rolepay_information}. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
 reply_message_from_admin_text_respectfully: Final[str] = f"{rolepay_information}. Tanggapilah pesan di bawah ini dengan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
-def reply_message_from_user(message: str, history_context: list[str], is_admin: bool, nickname: str) -> str:
+cuaca_informations: Final[dict] = {
+    "now": "Cuaca sekarang",
+    "future": "Cuaca akan datang"
+}
+def reply_message_from_user(message: str, history_context: list[str], is_admin: bool, nickname: str, is_asking_cuaca:bool, cuaca_result_now: str, cuaca_result_future: str) -> str:
     is_giving_feedback_question = random.choices([True, False], weights=[30, 60], k=1)[0]
     is_calling_nickname = random.choices([True, False], weights=[60, 30], k=1)[0]
     if is_admin:
@@ -79,13 +83,14 @@ def reply_message_from_user(message: str, history_context: list[str], is_admin: 
     history_content_formatted = get_context_history(history_context)
     return f"""
 {reply_message_from_admin_text_respectfully if is_admin else reply_message_from_user_text}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
+{ f'Cuaca sekarang: {cuaca_result_now}, Cuaca akan datang: {cuaca_result_future}. Sampaikan kalau kamu dapat informasi ini dari BMKG.' if is_asking_cuaca else ""}
 {f'Perhatikan konteks history percakapan. Konteks history percakapan: {history_content_formatted}' if {len(history_context) > 0} else ''}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
 Pesan: {message}
 {dont_repeat_question_from_user}
 """
 reply_message_from_user_on_replying_prev_context_text: Final[str] = f"{rolepay_information}. Seseorang me-reply komenanmu sebelumnya. Tanggapilah reply dari orang tersebut dengan memperhatikan konteks history percakapan. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
 reply_message_from_admin_on_replying_prev_context_text_respectfully: Final[str] = f"{rolepay_information}. Atasan kamu me-reply komenanmu sebelumnya. Tanggapilah reply dari atasan kamu tersebut dengan memperhatikan konteks history percakapan, gunakan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
-def reply_message_from_user_on_replying_prev_context(message: str, history_context: list[str], prev_context: str, is_admin: bool, nickname: str) -> str:
+def reply_message_from_user_on_replying_prev_context(message: str, history_context: list[str], prev_context: str, is_admin: bool, nickname: str, is_asking_cuaca:bool, cuaca_result_now: str, cuaca_result_future: str) -> str:
     is_giving_feedback_question = random.choices([True, False], weights=[30, 60], k=1)[0]
     is_calling_nickname = random.choices([True, False], weights=[60, 30], k=1)[0]
     if is_admin:
@@ -93,6 +98,7 @@ def reply_message_from_user_on_replying_prev_context(message: str, history_conte
     history_content_formatted = get_context_history(history_context)
     return f"""
 {reply_message_from_admin_on_replying_prev_context_text_respectfully if is_admin else reply_message_from_user_on_replying_prev_context_text}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
+{ f'Cuaca sekarang: {cuaca_result_now}, Cuaca akan datang: {cuaca_result_future}. Sampaikan kalau kamu dapat informasi ini dari BMKG.' if is_asking_cuaca else ""}
 {f'Konteks history percakapan: {history_content_formatted}. Pesan kamu yang di-reply seseorang: {prev_context}.' if {len(history_context) > 0} else f'Konteks komen kamu sebelumnya: {prev_context}'}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
 Reply baru seseorang: {message}
 {dont_repeat_question_from_user}

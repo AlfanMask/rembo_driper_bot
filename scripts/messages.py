@@ -23,6 +23,8 @@ import os
 # setup gemini ai instance
 bot_usn = os.getenv("BOT_USERNAME")
 admin_id = os.getenv("ADMIN_ID")
+from helper import weather
+from constants import univs, groups
 
 
 # messages history context: 10 of latest request (5) and response (5) data as context reference
@@ -46,6 +48,16 @@ async def handler_msg_reply(message: types.Message) -> None:
     nickname = drivers.nicknames.get(user_id)
     if nickname == None:
         nickname = "kak"
+        
+    # check if asking for weahter information
+    is_asking_cuaca: bool = False
+    cuaca_result_now = ""
+    cuaca_result_future = ""
+    user_group_id = message.chat.id
+    user_univ = next((key for key, value in groups.group_chat_ids.items() if value == str(user_group_id)), None)
+    if "cuaca" in message.text:
+        (cuaca_result_now, cuaca_result_future) = await weather.get_weather_by_univ(user_univ)
+        is_asking_cuaca = True
     
     if message_type in ["group", "supergroup"]:
         # get message from user
@@ -62,12 +74,12 @@ async def handler_msg_reply(message: types.Message) -> None:
             is_reply_from_someone = message.reply_to_message
             if is_reply_from_someone:
                 prev_context = message.reply_to_message.text
-                replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, history_context, prev_context, is_admin, nickname))
+                replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, history_context, prev_context, is_admin, nickname, is_asking_cuaca, cuaca_result_now, cuaca_result_future))
             else:
-                replied_msg = model.generate_content(prompts.reply_message_from_user(message_from_user, history_context, is_admin, nickname))
+                replied_msg = model.generate_content(prompts.reply_message_from_user(message_from_user, history_context, is_admin, nickname, is_asking_cuaca, cuaca_result_now, cuaca_result_future))
         elif is_replying_bot:
             prev_context = message.reply_to_message.text
-            replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, history_context, prev_context, is_admin, nickname))
+            replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context(message_from_user, history_context, prev_context, is_admin, nickname, is_asking_cuaca, cuaca_result_now, cuaca_result_future))
         
         if replied_msg != None:
             await message.reply(replied_msg.text, parse_mode="Markdown")
