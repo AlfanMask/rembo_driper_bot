@@ -83,7 +83,7 @@ def reply_message_from_user(message: str, history_context: list[str], is_admin: 
     history_content_formatted = get_context_history(history_context)
     return f"""
 {reply_message_from_admin_text_respectfully if is_admin else reply_message_from_user_text}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
-{ f'Cuaca sekarang: {cuaca_result_now}, Cuaca akan datang: {cuaca_result_future}. Sampaikan kalau kamu dapat informasi ini dari BMKG.' if is_asking_cuaca else ""}
+{ f'Kamu tahu kalau cuaca sekarang: {cuaca_result_now}, cuaca akan datang: {cuaca_result_future}. Kamu menyampaikan informasi cuaca ini dan sampaikan kalau kamu dapat informasi ini dari BMKG.' if is_asking_cuaca else ""}
 {f'Perhatikan konteks history percakapan. Konteks history percakapan: {history_content_formatted}' if {len(history_context) > 0} else ''}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
 Pesan: {message}
 {dont_repeat_question_from_user}
@@ -98,7 +98,7 @@ def reply_message_from_user_on_replying_prev_context(message: str, history_conte
     history_content_formatted = get_context_history(history_context)
     return f"""
 {reply_message_from_admin_on_replying_prev_context_text_respectfully if is_admin else reply_message_from_user_on_replying_prev_context_text}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
-{ f'Cuaca sekarang: {cuaca_result_now}, Cuaca akan datang: {cuaca_result_future}. Sampaikan kalau kamu dapat informasi ini dari BMKG.' if is_asking_cuaca else ""}
+{ f'Kamu tahu kalau cuaca sekarang: {cuaca_result_now}, cuaca akan datang: {cuaca_result_future}. Kamu menyampaikan informasi cuaca ini dan sampaikan kalau kamu dapat informasi ini dari BMKG.' if is_asking_cuaca else ""}
 {f'Konteks history percakapan: {history_content_formatted}. Pesan kamu yang di-reply seseorang: {prev_context}.' if {len(history_context) > 0} else f'Konteks komen kamu sebelumnya: {prev_context}'}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
 Reply baru seseorang: {message}
 {dont_repeat_question_from_user}
