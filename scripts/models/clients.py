@@ -53,7 +53,7 @@ class Client:
                 conn = db.connect()
                 cursor = conn.cursor()
                 
-                cursor.execute(f"SELECT link, message FROM magers WHERE univ='UNS' AND type LIKE '%#ANJEM%' AND is_reminded = 0 AND num_comments IS NULL AND is_closed = 0 AND (created_at BETWEEN NOW() - INTERVAL 1 HOUR AND NOW() - INTERVAL 10 MINUTE) ORDER BY id ASC LIMIT 1")
+                cursor.execute(f"SELECT link, message FROM magers WHERE univ='UNS' AND type LIKE '%#ANJEM%' AND is_reminded = 0 AND num_comments IS NULL AND deleted = 0 AND is_closed = 0 AND (created_at BETWEEN NOW() - INTERVAL 1 HOUR AND NOW() - INTERVAL 10 MINUTE) ORDER BY id ASC LIMIT 1")
                 result = cursor.fetchone()
 
                 if result:
@@ -64,7 +64,7 @@ class Client:
                 conn = db.connect()
                 cursor = conn.cursor()
                 
-                cursor.execute(f"SELECT link, message FROM magers WHERE univ='UMS' AND type LIKE '%#ANJEM%' AND is_reminded = 0 AND num_comments IS NULL AND is_closed = 0 AND (created_at BETWEEN NOW() - INTERVAL 1 HOUR AND NOW() - INTERVAL 10 MINUTE) ORDER BY id ASC LIMIT 1")
+                cursor.execute(f"SELECT link, message FROM magers WHERE univ='UMS' AND type LIKE '%#ANJEM%' AND is_reminded = 0 AND num_comments IS NULL AND deleted = 0 AND is_closed = 0 AND (created_at BETWEEN NOW() - INTERVAL 1 HOUR AND NOW() - INTERVAL 10 MINUTE) ORDER BY id ASC LIMIT 1")
                 result = cursor.fetchone()
 
                 if result:
