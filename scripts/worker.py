@@ -35,6 +35,12 @@ async def worker() -> None:
         if anjem_ums_dont_get_drivers_link:
             await gemini.announce_anjem_dont_get_driver(anjem_ums_dont_get_drivers_link, order_msg, univs.ums)
             client.magers.update.set_is_reminded_true_by_link(anjem_ums_dont_get_drivers_link)
+            
+        # for UNY campus
+        (anjem_uny_dont_get_drivers_link, order_msg) = client.magers.get.newest_anjem_uny_dont_get_drivers_link()
+        if anjem_uny_dont_get_drivers_link:
+            await gemini.announce_anjem_dont_get_driver(anjem_uny_dont_get_drivers_link, order_msg, univs.uny)
+            client.magers.update.set_is_reminded_true_by_link(anjem_uny_dont_get_drivers_link)
 
         # checking if there is many orders don't get drivers -> announce to drivers group
         # FOR NOW: only for uns
