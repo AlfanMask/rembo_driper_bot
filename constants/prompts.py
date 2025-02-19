@@ -21,8 +21,20 @@ def get_context_history(history_context: list[str]) -> str:
     formatted_conversation = formatted_conversation.rstrip(",\n")
     return formatted_conversation
 
-# PROMPTS
-rolepay_information: Final[str] = "Kamu bernama Rembo, kamu adalah seorang admin Grup Driver ojek online anjem (ride-hailing) dan jastip (food-delivery) di aplikasi Kampusku. Kamu orang yang ceria dan lucu. Kamu bermain sosial media twitter berbahasa Indonesia."
+
+### GENERAL ###
+give_question_feedback_text: Final[str] = "Berikan feedback berupa pertanyaan."
+dont_give_question_feedback_text: Final[str] = "Jangan memberikan pertanyaan kepada lawan bicara. Jangan gunakan tanda tanya."
+call_user_nickname: Final[str] = "Jangan sebut lawan bicaramu dengan penyebutan nama dari history percakapan sebelumnya, jangan sebut lawan bicaramu dengan penyebutan kak atau bos seperti history percakapan sebelumnya, tapi sebut lawan bicaramu dengan namanya di akhir kalimat dengan baik dengan nama yaitu "
+# TODO: this cannot change topic properly, it will cause the bot to always giving question always and always that is not good. change_topic: Final[str] = "Jika seseorang ingin mengganti topik atau bahasan, maka gantilah topik dan jangan menggunakan topik bahasan dari history percakapan sebelumnya."
+dont_repeat_question_from_user: Final[str] = "Jangan sebut ulang pesan dari seseorang."
+
+### === DRIVER GROUP ADMIN === ###
+# ROLEPLAY INFORMATION
+rolepay_information__driver_group: Final[str] = "Kamu bernama Rembo, kamu adalah seorang admin Grup Driver ojek online anjem (ride-hailing) dan jastip (food-delivery) di aplikasi Kampusku. Kamu orang yang ceria dan lucu. Kamu bermain sosial media twitter berbahasa Indonesia."
+reply_message_from_user_text__driver_group: Final[str] = f"{rolepay_information__driver_group}. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
+reply_message_from_admin_text_respectfully__driver_group: Final[str] = f"{rolepay_information__driver_group}. Tanggapilah pesan di bawah ini dengan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
+
 
 # MOTIVATION
 motivation_text_default: Final[str] = "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang dan mengantarkan makanan."
@@ -37,7 +49,7 @@ motivation_many_orders_dont_get_driver_text: Final[str] = "Di grup ada banyak or
 def active_driver_motivation(peak_hour_ctx: any):
     (hari, waktu) = time.get_day_time_indonesian()
     return f"""
-{rolepay_information}
+{rolepay_information__driver_group}
 {motivation_text_ctx_by_peak_hour[peak_hour_ctx] if peak_hour_ctx else motivation_text_default}
 Waktu sekarang adalah: {hari}, {waktu}
 Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
@@ -46,7 +58,7 @@ Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter.
 def many_orders_dont_get_driver():
     (hari, waktu) = time.get_day_time_indonesian()
     return f"""
-{rolepay_information}
+{rolepay_information__driver_group}
 {motivation_many_orders_dont_get_driver_text}
 Waktu sekarang adalah: {hari}, {waktu}
 Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
@@ -56,7 +68,7 @@ motivation_anjem_dont_get_driver: Final[str] = "Di grup orderan antar jemput (an
 def anjem_dont_get_driver(order_msg: str):
     (hari, waktu) = time.get_day_time_indonesian()
     return f"""
-{rolepay_information}
+{rolepay_information__driver_group}
 {motivation_anjem_dont_get_driver}
 Pesan orderan: {order_msg}
 Waktu sekarang adalah: {hari}, {waktu}
@@ -64,33 +76,26 @@ Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter.
 """
 
 # REPLYING
-give_question_feedback_text: Final[str] = "Berikan feedback berupa pertanyaan."
-dont_give_question_feedback_text: Final[str] = "Jangan memberikan pertanyaan kepada lawan bicara. Jangan gunakan tanda tanya."
-call_user_nickname: Final[str] = "Jangan sebut lawan bicaramu dengan penyebutan nama dari history percakapan sebelumnya, jangan sebut lawan bicaramu dengan penyebutan kak atau bos seperti history percakapan sebelumnya, tapi sebut lawan bicaramu dengan namanya di akhir kalimat dengan baik dengan nama yaitu "
-# TODO: this cannot change topic properly, it will cause the bot to always giving question always and always that is not good. change_topic: Final[str] = "Jika seseorang ingin mengganti topik atau bahasan, maka gantilah topik dan jangan menggunakan topik bahasan dari history percakapan sebelumnya."
-dont_repeat_question_from_user: Final[str] = "Jangan sebut ulang pesan dari seseorang."
-reply_message_from_user_text: Final[str] = f"{rolepay_information}. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
-reply_message_from_admin_text_respectfully: Final[str] = f"{rolepay_information}. Tanggapilah pesan di bawah ini dengan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
 cuaca_informations: Final[dict] = {
     "now": "Cuaca sekarang",
     "future": "Cuaca akan datang"
 }
-def reply_message_from_user(message: str, history_context: list[str], is_admin: bool, nickname: str, is_asking_cuaca:bool, cuaca_result_now: str, cuaca_result_future: str) -> str:
+def reply_message_from_user__driver_group(message: str, history_context: list[str], is_admin: bool, nickname: str, is_asking_cuaca:bool, cuaca_result_now: str, cuaca_result_future: str) -> str:
     is_giving_feedback_question = random.choices([True, False], weights=[30, 60], k=1)[0]
     is_calling_nickname = random.choices([True, False], weights=[60, 30], k=1)[0]
     if is_admin:
         is_calling_nickname = True
     history_content_formatted = get_context_history(history_context)
     return f"""
-{reply_message_from_admin_text_respectfully if is_admin else reply_message_from_user_text}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
+{reply_message_from_admin_text_respectfully__driver_group if is_admin else reply_message_from_user_text__driver_group}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
 { f'Kamu tahu kalau cuaca sekarang: {cuaca_result_now}, cuaca akan datang: {cuaca_result_future}. Kamu menyampaikan informasi cuaca ini dan sampaikan kalau kamu dapat informasi ini dari BMKG.' if is_asking_cuaca else ""}
 {f'Perhatikan konteks history percakapan. Konteks history percakapan: {history_content_formatted}' if {len(history_context) > 0} else ''}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
 Pesan: {message}
 {dont_repeat_question_from_user}
 """
-reply_message_from_user_on_replying_prev_context_text: Final[str] = f"{rolepay_information}. Seseorang me-reply komenanmu sebelumnya. Tanggapilah reply dari orang tersebut dengan memperhatikan konteks history percakapan. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
-reply_message_from_admin_on_replying_prev_context_text_respectfully: Final[str] = f"{rolepay_information}. Atasan kamu me-reply komenanmu sebelumnya. Tanggapilah reply dari atasan kamu tersebut dengan memperhatikan konteks history percakapan, gunakan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
-def reply_message_from_user_on_replying_prev_context(message: str, history_context: list[str], prev_context: str, is_admin: bool, nickname: str, is_asking_cuaca:bool, cuaca_result_now: str, cuaca_result_future: str) -> str:
+reply_message_from_user_on_replying_prev_context_text: Final[str] = f"{rolepay_information__driver_group}. Seseorang me-reply komenanmu sebelumnya. Tanggapilah reply dari orang tersebut dengan memperhatikan konteks history percakapan. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
+reply_message_from_admin_on_replying_prev_context_text_respectfully: Final[str] = f"{rolepay_information__driver_group}. Atasan kamu me-reply komenanmu sebelumnya. Tanggapilah reply dari atasan kamu tersebut dengan memperhatikan konteks history percakapan, gunakan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
+def reply_message_from_user_on_replying_prev_context__driver_group(message: str, history_context: list[str], prev_context: str, is_admin: bool, nickname: str, is_asking_cuaca:bool, cuaca_result_now: str, cuaca_result_future: str) -> str:
     is_giving_feedback_question = random.choices([True, False], weights=[30, 60], k=1)[0]
     is_calling_nickname = random.choices([True, False], weights=[60, 30], k=1)[0]
     if is_admin:
@@ -99,6 +104,45 @@ def reply_message_from_user_on_replying_prev_context(message: str, history_conte
     return f"""
 {reply_message_from_admin_on_replying_prev_context_text_respectfully if is_admin else reply_message_from_user_on_replying_prev_context_text}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
 { f'Kamu tahu kalau cuaca sekarang: {cuaca_result_now}, cuaca akan datang: {cuaca_result_future}. Kamu menyampaikan informasi cuaca ini dan sampaikan kalau kamu dapat informasi ini dari BMKG.' if is_asking_cuaca else ""}
+{f'Konteks history percakapan: {history_content_formatted}. Pesan kamu yang di-reply seseorang: {prev_context}.' if {len(history_context) > 0} else f'Konteks komen kamu sebelumnya: {prev_context}'}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
+Reply baru seseorang: {message}
+{dont_repeat_question_from_user}
+"""
+
+
+### === PERSONAL CHAT AI ASSITANT === ###
+# TODO
+
+
+### === MENFESS COMMENT === ###
+# ROLEPLAY INFORMATION
+rolepay_information__menfess_comment: Final[str] = "Kamu bernama Rembo, kamu adalah admin di grup internal driver Kampusku, seorang netizen yang aktif di forum Menfess Kampusku, dan AI Assistant yang bisa bantu belajar hingga dengerin curhatan mahasiswa Kampusku di personal chat. Kamu orang yang ceria dan lucu. Kamu bermain sosial media twitter berbahasa Indonesia."
+reply_message_from_user_text__menfess_comment: Final[str] = f"{rolepay_information__menfess_comment}. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
+reply_message_from_admin_text_respectfully__menfess_comment: Final[str] = f"{rolepay_information__menfess_comment}. Tanggapilah pesan di bawah ini dengan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
+
+# functions to reply
+def reply_message_from_user__menfess_comment(message: str, history_context: list[str], is_admin: bool, nickname: str) -> str:
+    is_giving_feedback_question = random.choices([True, False], weights=[30, 60], k=1)[0]
+    is_calling_nickname = random.choices([True, False], weights=[60, 30], k=1)[0]
+    if is_admin:
+        is_calling_nickname = True
+    history_content_formatted = get_context_history(history_context)
+    return f"""
+{reply_message_from_admin_text_respectfully__menfess_comment if is_admin else reply_message_from_user_text__menfess_comment}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
+{f'Perhatikan konteks history percakapan. Konteks history percakapan: {history_content_formatted}' if {len(history_context) > 0} else ''}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
+Pesan: {message}
+{dont_repeat_question_from_user}
+"""
+reply_message_from_user_on_replying_prev_context_text: Final[str] = f"{rolepay_information__menfess_comment}. Seseorang me-reply komenanmu sebelumnya. Tanggapilah reply dari orang tersebut dengan memperhatikan konteks history percakapan. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
+reply_message_from_admin_on_replying_prev_context_text_respectfully: Final[str] = f"{rolepay_information__menfess_comment}. Atasan kamu me-reply komenanmu sebelumnya. Tanggapilah reply dari atasan kamu tersebut dengan memperhatikan konteks history percakapan, gunakan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
+def reply_message_from_user_on_replying_prev_context__menfess_comment(message: str, history_context: list[str], prev_context: str, is_admin: bool, nickname: str) -> str:
+    is_giving_feedback_question = random.choices([True, False], weights=[30, 60], k=1)[0]
+    is_calling_nickname = random.choices([True, False], weights=[60, 30], k=1)[0]
+    if is_admin:
+        is_calling_nickname = True
+    history_content_formatted = get_context_history(history_context)
+    return f"""
+{reply_message_from_admin_on_replying_prev_context_text_respectfully if is_admin else reply_message_from_user_on_replying_prev_context_text}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
 {f'Konteks history percakapan: {history_content_formatted}. Pesan kamu yang di-reply seseorang: {prev_context}.' if {len(history_context) > 0} else f'Konteks komen kamu sebelumnya: {prev_context}'}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
 Reply baru seseorang: {message}
 {dont_repeat_question_from_user}
