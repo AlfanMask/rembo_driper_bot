@@ -15,8 +15,10 @@ from instances.dp import dp
 from instances.logger import bot_logger
 # from scripts.instances.db import db
 from scripts import keyboards
-from constants import lang, prompts, input_state
+from constants import statuses, input_state
 from scripts.worker import worker
+from scripts.instances.client import client
+from scripts import keyboards
 from helper import gemini
 
 """
@@ -59,3 +61,24 @@ async def start_command(message: Message):
 async def motivation(message: Message):
     await gemini.send_motivation()
     await message.reply(text="Motivation Sent to the group!")
+    
+    
+# Setting Up AI Assistant Character
+@dp.message(Command("setting"))
+async def motivation(message: Message):
+    user_id = message.from_user.id
+    kb_setting = keyboards.set_setting_keyboard()
+    client.users.update.input_state_by_user_id(user_id, input_state.input_setting_ref_ai)
+
+    # send message alert to send the user_id to be deleted input_state
+    active_preference = client.users.get.active_preference_ai(user_id)
+    try:
+        await bot.send_message(
+            chat_id=user_id,
+            text=statuses.msg_setting_character(active_preference),
+            reply_markup=kb_setting,
+            parse_mode="HTML",
+        )
+    except Exception as e:
+        print(f"{datetime.datetime.now()} - ERROR - [commands.setting] - {user_id} - {e}")
+        bot_logger.error(f"{datetime.datetime.now()} - [commands.setting] - {user_id} - {e}")

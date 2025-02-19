@@ -14,6 +14,7 @@ from instances.bot import bot
 from instances.dp import dp
 from instances.logger import bot_logger
 from commands import start_command
+from callbacks.callbacks import callback
 from messages import handler_msg_reply
 
 async def main() -> None:

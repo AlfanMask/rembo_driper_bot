@@ -112,32 +112,36 @@ Reply baru seseorang: {message}
 
 ### === PERSONAL CHAT AI ASSITANT === ###
 # ROLEPLAY INFORMATION
-rolepay_information__ai_assistant: Final[str] = "Kamu bernama Rembo, kamu adalah AI Assistant yang bisa bantu belajar hingga dengerin curhatan mahasiswa Kampusku di personal chat. Kamu orang yang pintar, ceria dan lucu."
-reply_message_from_user_text__ai_assistant: Final[str] = f"{rolepay_information__ai_assistant}. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
-reply_message_from_admin_text_respectfully__ai_assistant: Final[str] = f"{rolepay_information__ai_assistant}. Tanggapilah pesan di bawah ini dengan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
+# rolepay_information__ai_assistant: Final[str] = "Kamu bernama Rembo, kamu adalah AI Assistant yang bisa bantu belajar hingga dengerin curhatan mahasiswa Kampusku di personal chat. Kamu orang yang pintar, ceria dan lucu."
+def rolepay_information__ai_assistant(pref_ai_character: str) -> str:
+    return f"Kamu bernama Rembo, kamu adalah AI Assistant yang bisa bantu belajar hingga dengerin curhatan mahasiswa Kampusku di personal chat. Kamu orang yang {pref_ai_character}."
+reply_message_from_user_text__ai_assistant: Final[str] = f"Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
+reply_message_from_admin_text_respectfully__ai_assistant: Final[str] = f"Tanggapilah pesan di bawah ini dengan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
 
 # functions to reply
-def reply_message_from_user__ai_assistant(message: str, history_context: list[str], is_admin: bool, nickname: str) -> str:
+def reply_message_from_user__ai_assistant(message: str, history_context: list[str], is_admin: bool, nickname: str, pref_ai_character: str) -> str:
     is_giving_feedback_question = random.choices([True, False], weights=[30, 60], k=1)[0]
     is_calling_nickname = random.choices([True, False], weights=[60, 30], k=1)[0]
     if is_admin:
         is_calling_nickname = True
     history_content_formatted = get_context_history(history_context)
     return f"""
+{rolepay_information__ai_assistant(pref_ai_character)}
 {reply_message_from_admin_text_respectfully__ai_assistant if is_admin else reply_message_from_user_text__ai_assistant}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
 {f'Perhatikan konteks history percakapan. Konteks history percakapan: {history_content_formatted}' if {len(history_context) > 0} else ''}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
 Pesan: {message}
 {dont_repeat_question_from_user}
 """
-reply_message_from_user_on_replying_prev_context_text: Final[str] = f"{rolepay_information__ai_assistant}. Seseorang me-reply komenanmu sebelumnya. Tanggapilah reply dari orang tersebut dengan memperhatikan konteks history percakapan. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
-reply_message_from_admin_on_replying_prev_context_text_respectfully: Final[str] = f"{rolepay_information__ai_assistant}. Atasan kamu me-reply komenanmu sebelumnya. Tanggapilah reply dari atasan kamu tersebut dengan memperhatikan konteks history percakapan, gunakan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
-def reply_message_from_user_on_replying_prev_context__ai_assistant(message: str, history_context: list[str], prev_context: str, is_admin: bool, nickname: str) -> str:
+reply_message_from_user_on_replying_prev_context_text: Final[str] = f"Seseorang me-reply komenanmu sebelumnya. Tanggapilah reply dari orang tersebut dengan memperhatikan konteks history percakapan. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
+reply_message_from_admin_on_replying_prev_context_text_respectfully: Final[str] = f"Atasan kamu me-reply komenanmu sebelumnya. Tanggapilah reply dari atasan kamu tersebut dengan memperhatikan konteks history percakapan, gunakan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
+def reply_message_from_user_on_replying_prev_context__ai_assistant(message: str, history_context: list[str], prev_context: str, is_admin: bool, nickname: str, pref_ai_character: str) -> str:
     is_giving_feedback_question = random.choices([True, False], weights=[30, 60], k=1)[0]
     is_calling_nickname = random.choices([True, False], weights=[60, 30], k=1)[0]
     if is_admin:
         is_calling_nickname = True
     history_content_formatted = get_context_history(history_context)
     return f"""
+{rolepay_information__ai_assistant(pref_ai_character)}
 {reply_message_from_admin_on_replying_prev_context_text_respectfully if is_admin else reply_message_from_user_on_replying_prev_context_text}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
 {f'Konteks history percakapan: {history_content_formatted}. Pesan kamu yang di-reply seseorang: {prev_context}.' if {len(history_context) > 0} else f'Konteks komen kamu sebelumnya: {prev_context}'}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
 Reply baru seseorang: {message}

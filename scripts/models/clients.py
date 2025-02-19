@@ -25,6 +25,91 @@ class Client:
         result = cursor.fetchall()
         conn.close()
         return str(result)
+    
+    # USERS namepsace
+    class users:
+        def __init__(self):
+            self = self
+            
+        # GET (read) namespace
+        class get:
+            def __init__(self):
+                self = self
+                
+            def lang_by_user_id(user_id: str) -> lang:
+                conn = db.connect()
+                cursor = conn.cursor()
+                
+                # get lang
+                cursor.execute(f"SELECT lang FROM users WHERE user_id = '{user_id}'")
+                user_lang: lang = cursor.fetchone()
+
+                if user_lang:
+                    return user_lang[0]
+                return None
+            
+            def active_preference_ai(user_id:str) -> str:
+                conn = db.connect()
+                cursor = conn.cursor()
+                
+                cursor.execute(f"SELECT preference_ai FROM users WHERE user_id = '{user_id}'")
+                result = cursor.fetchone()
+
+                return result[0]
+
+            def input_state_by_user_id(user_id: str) -> str:
+                conn = db.connect()
+                cursor = conn.cursor()
+                
+                # get input_state
+                cursor.execute(f"SELECT input_state FROM users WHERE user_id = '{user_id}'")
+                input_state: str = cursor.fetchone()[0]
+                
+                return input_state
+            
+        # UPDATE namespace
+        class update:
+            def __init__(self):
+                self = self
+
+            def input_state_by_user_id(user_id: str, state: str) -> None:
+                conn = db.connect()
+                cursor = conn.cursor()
+                
+                # update input_state
+                cursor.execute(f"UPDATE users SET input_state = '{state}' WHERE user_id = '{user_id}'")
+                
+                # commit query
+                conn.commit()
+                conn.close()
+                
+            def preference_ai_by_user_id(user_id: str, pref_ai: str) -> None:
+                conn = db.connect()
+                cursor = conn.cursor()
+                
+                # update input_state
+                cursor.execute(f"UPDATE users SET preference_ai = '{pref_ai}' WHERE user_id = '{user_id}'")
+                
+                # commit query
+                conn.commit()
+                conn.close()
+                
+                
+        # DELETE namespace
+        class delete:
+            def __init__(self):
+                self = self
+                
+            def input_state_by_user_id(user_id: str) -> None:
+                conn = db.connect()
+                cursor = conn.cursor()
+                
+                # delete input_state from user
+                cursor.execute(f"UPDATE users SET input_state = NULL WHERE user_id = '{user_id}'")
+
+                # commit query
+                conn.commit()
+                conn.close()
 
         
     # MAGER namepsace
@@ -126,7 +211,7 @@ class Client:
                 conn = db.connect()
                 cursor = conn.cursor()
                 
-                query = "SELECT message FROM ai_assistant_messages WHERE user_id = %s ORDER BY id DESC LIMIT 20"
+                query = "SELECT message FROM ai_assistant_messages WHERE user_id = %s AND created_at BETWEEN NOW() - INTERVAL 1 HOUR AND NOW() ORDER BY id DESC LIMIT 20"
                 
                 cursor.execute(query, (user_id,))
                 result = cursor.fetchall()
