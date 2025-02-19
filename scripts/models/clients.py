@@ -93,3 +93,48 @@ class Client:
                 cursor.execute(f"UPDATE magers SET is_reminded = 1 WHERE link = '{link}'")
                 conn.commit()
                 conn.close()
+                
+                
+    # AI ASSISTANT MESSAGES namepsace
+    class ai_assistant_messages:
+        def __init__(self):
+            self = self
+                
+        # CREATE namespace
+        class create:
+            def __init__(self):
+                self = self
+                
+            # check if there are >= 5 orders that dont get driver yet
+            def new(user_id: str, message_type: str, message: str) -> bool:
+                conn = db.connect()
+                cursor = conn.cursor()
+                
+                # insert
+                created_at: str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                cursor.execute("INSERT INTO ai_assistant_messages (user_id, type, message, created_at) VALUES (%s, %s, %s, %s)", (user_id, message_type, message, created_at))
+
+                conn.commit()
+                conn.close()
+                
+        # GET (read) namespace
+        class get:
+            def __init__(self):
+                self = self
+                
+            def last_20_chats_from_user_id(user_id: str) -> list[str]:
+                conn = db.connect()
+                cursor = conn.cursor()
+                
+                query = "SELECT message FROM ai_assistant_messages WHERE user_id = %s ORDER BY id DESC LIMIT 20"
+                
+                cursor.execute(query, (user_id,))
+                result = cursor.fetchall()
+                
+                # Extract messages from the result and reverse the list to get the oldest first
+                messages = [row[0] for row in result][::-1]
+                
+                cursor.close()
+                conn.close()
+                
+                return messages
