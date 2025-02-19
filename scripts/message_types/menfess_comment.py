@@ -47,34 +47,35 @@ async def do(message: types.Message):
         nickname = "kak"
     
     if message_type in ["group", "supergroup"]:
-        # get message from user
-        message_from_user = message.text.replace(bot_usn, "")
+        if message.text:
+            # get message from user
+            message_from_user = message.text.replace(bot_usn, "")
 
-        # get post context so AI know what is he mentioned to if needed
-        post_context = message.reply_to_message.text or message.reply_to_message.caption or ""
+            # get post context so AI know what is he mentioned to if needed
+            post_context = message.reply_to_message.text or message.reply_to_message.caption or ""
 
-        # check if user answering message from bot
-        is_replying_bot = False
-        if message.reply_to_message != None:
-            is_replying_bot = True if message.reply_to_message.from_user.username == bot_usn.replace("@","") else False
-            
-        # reply message using gemini AI
-        replied_msg = None
-        if (bot_usn in message.text):
-            is_reply_from_someone = message.reply_to_message
-            if is_reply_from_someone:
+            # check if user answering message from bot
+            is_replying_bot = False
+            if message.reply_to_message != None:
+                is_replying_bot = True if message.reply_to_message.from_user.username == bot_usn.replace("@","") else False
+                
+            # reply message using gemini AI
+            replied_msg = None
+            if (bot_usn in message.text):
+                is_reply_from_someone = message.reply_to_message
+                if is_reply_from_someone:
+                    prev_context = message.reply_to_message.text
+                    replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__menfess_comment(message_from_user, history_context, prev_context, is_admin, nickname, post_context))
+                else:
+                    replied_msg = model.generate_content(prompts.reply_message_from_user__menfess_comment(message_from_user, history_context, is_admin, nickname, post_context))
+            elif is_replying_bot:
                 prev_context = message.reply_to_message.text
                 replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__menfess_comment(message_from_user, history_context, prev_context, is_admin, nickname, post_context))
-            else:
-                replied_msg = model.generate_content(prompts.reply_message_from_user__menfess_comment(message_from_user, history_context, is_admin, nickname, post_context))
-        elif is_replying_bot:
-            prev_context = message.reply_to_message.text
-            replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__menfess_comment(message_from_user, history_context, prev_context, is_admin, nickname, post_context))
-        
-        if replied_msg != None:
-            await message.reply(replied_msg.text, parse_mode="Markdown")
-            await update_history_ctx(message_from_user)
-            await update_history_ctx(replied_msg.text)
+            
+            if replied_msg != None:
+                await message.reply(replied_msg.text, parse_mode="Markdown")
+                await update_history_ctx(message_from_user)
+                await update_history_ctx(replied_msg.text)
             
 async def update_history_ctx(text: str) -> None:
     global history_context
