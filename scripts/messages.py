@@ -32,25 +32,26 @@ from scripts.instances.client import client
 @dp.message()
 async def handler_msg_reply(message: types.Message) -> None:
     try:
-        # if handling input_state of this bot
-        user_input_state = client.users.get.input_state_by_user_id(message.from_user.id)
-        ai_assistant_input_states: list[str] = [input_state.input_setting_ref_ai]
-        if user_input_state in ai_assistant_input_states:
-            await process_user_input_state(message.from_user.id, user_input_state, message.text)
-            return
-        
-        # MAKE 3 TYPES OF MESSAGES: Driver Group discussion, Personal Chat AI Assistent, and Menfess comment
-        # == Driver Group Discussion
-        if f"-100{str(message.chat.id).replace('-','')}" in groups.group_chat_ids.values():
-            await driver_groups.do(message)
-        
-        # == Personal Chat AI Assistant
-        elif message.chat.type == "private":
-            await ai_assistant.do(message)
-        
-        # == Menfess comment
-        else:
-            await menfess_comment.do(message)
+        if message.text:        
+            # if handling input_state of this bot
+            user_input_state = client.users.get.input_state_by_user_id(message.from_user.id)
+            ai_assistant_input_states: list[str] = [input_state.input_setting_ref_ai]
+            if user_input_state in ai_assistant_input_states:
+                await process_user_input_state(message.from_user.id, user_input_state, message.text)
+                return
+            
+            # MAKE 3 TYPES OF MESSAGES: Driver Group discussion, Personal Chat AI Assistent, and Menfess comment
+            # == Driver Group Discussion
+            if f"-100{str(message.chat.id).replace('-','')}" in groups.group_chat_ids.values():
+                await driver_groups.do(message)
+            
+            # == Personal Chat AI Assistant
+            elif message.chat.type == "private":
+                await ai_assistant.do(message)
+            
+            # == Menfess comment
+            else:
+                await menfess_comment.do(message)
     except Exception as e:
         print(f"handler_msg_reply error: {e}")
         logging.error(f"{datetime.datetime.now()} - [messages.handler_msg_reply] Error: {e}")
