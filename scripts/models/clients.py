@@ -63,9 +63,11 @@ class Client:
                 
                 # get input_state
                 cursor.execute(f"SELECT input_state FROM users WHERE user_id = '{user_id}'")
-                input_state: str = cursor.fetchone()[0]
+                input_state: str = cursor.fetchone()
                 
-                return input_state
+                if input_state:
+                    return input_state[0]
+                return None
             
         # UPDATE namespace
         class update:
