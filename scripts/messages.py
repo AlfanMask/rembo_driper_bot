@@ -52,7 +52,7 @@ async def handler_msg_reply(message: types.Message) -> None:
         else:
             await menfess_comment.do(message)
     except Exception as e:
-        print(f"error: {e}")
+        print(f"handler_msg_reply error: {e}")
         logging.error(f"{datetime.datetime.now()} - [messages.handler_msg_reply] Error: {e}")
         
         
@@ -62,7 +62,7 @@ async def process_user_input_state(user_id: str, user_input_state: str, message:
         if user_input_state == input_state.input_setting_ref_ai:
             await update_preference_ai(user_id, message)
     except Exception as e:
-        print(f"error: {e}")
+        print(f"process_user_input_state error: {e}")
         logging.error(f"{datetime.datetime.now()} - [messages.process_user_input_state] Error: {e}")
 
 async def update_preference_ai(user_id: str, pref_ai: str) -> None:
@@ -77,5 +77,5 @@ async def update_preference_ai(user_id: str, pref_ai: str) -> None:
             parse_mode="HTML",
         )
     except Exception as e:
-        print(f"error: {e}")
+        print(f"update_preference_ai error: {e}")
         logging.error(f"{datetime.datetime.now()} - [messages.update_preference_ai] Error: {e}")

@@ -60,8 +60,8 @@ async def worker() -> None:
             ticking_number_worker_run = 0
         
     except Exception as e:
-        print(f"error: {e}")
-        logging.error(f"{datetime.datetime.now()} - Error: {e}")
+        print(f"worker error: {e}")
+        logging.error(f"{datetime.datetime.now()} - worker Error: {e}")
         
 # UTILS
 def is_now_between(start_time, end_time):

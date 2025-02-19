@@ -23,8 +23,8 @@ async def do(user_id: str, user_lang: lang, data: str, message_id: str) -> None:
                 parse_mode="HTML",
             )
         except Exception as e:
-            print(e)
-            logging.error(f"{datetime.datetime.now()} - {e}")
+            print(f"cb_setting {e}")
+            logging.error(f"{datetime.datetime.now()} - cb_setting {e}")
     elif data == input_state.close[lang.id]:
         try:
             await bot.edit_message_text(
@@ -34,8 +34,8 @@ async def do(user_id: str, user_lang: lang, data: str, message_id: str) -> None:
                 text=statuses.msg_cancel_setting,
             )
         except Exception as e:
-            print(e)
-            logging.error(f"{datetime.datetime.now()} - {e}")
+            print(f"cb_setting {e}")
+            logging.error(f"{datetime.datetime.now()} - cb_setting {e}")
     else:
         # set input_state for current user to set_age
         client.users.delete.input_state_by_user_id(user_id)
@@ -47,5 +47,5 @@ async def do(user_id: str, user_lang: lang, data: str, message_id: str) -> None:
                 parse_mode="Markdown",
             )
         except Exception as e:
-            print(e)
-            logging.error(f"{datetime.datetime.now()} - {e}")
+            print(f"cb_setting {e}")
+            logging.error(f"{datetime.datetime.now()} - cb_setting {e}")

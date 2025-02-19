@@ -13,7 +13,7 @@ async def send_motivation(peak_hour_ctx: any=None):
             request_timeout=300,
         )
     except Exception as e:
-        print(f"error: {e}")
+        print(f"send_motivation error: {e}")
         logging.error(f"{datetime.datetime.now()} - Error: {e}")
         
 async def announce_many_orders_dont_get_driver():
@@ -26,7 +26,7 @@ async def announce_many_orders_dont_get_driver():
             request_timeout=300,
         )
     except Exception as e:
-        print(f"error: {e}")
+        print(f"announce_many_orders_dont_get_driver error: {e}")
         logging.error(f"{datetime.datetime.now()} - Error: {e}")
         
 async def announce_anjem_dont_get_driver(link: str, order_msg: str, univ: univs):
@@ -39,5 +39,5 @@ async def announce_anjem_dont_get_driver(link: str, order_msg: str, univ: univs)
             request_timeout=300,
         )
     except Exception as e:
-        print(f"error: {e}")
+        print(f"announce_anjem_dont_get_driver error: {e}")
         logging.error(f"{datetime.datetime.now()} - Error: {e}")
