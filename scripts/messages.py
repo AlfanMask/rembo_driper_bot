@@ -25,21 +25,20 @@ bot_usn = os.getenv("BOT_USERNAME")
 admin_id = os.getenv("ADMIN_ID")
 from helper import weather
 from constants import univs, groups
-from message_types import driver_groups, menfess_comment
+from message_types import driver_groups, ai_assistant, menfess_comment
+from scripts.instances import openrouter
 
 # handle bot to reply message
 @dp.message()
 async def handler_msg_reply(message: types.Message) -> None:
     # MAKE 3 TYPES OF MESSAGES: Driver Group discussion, Personal Chat AI Assistent, and Menfess comment
-    
     # == Driver Group Discussion
     if f"-100{str(message.chat.id).replace('-','')}" in groups.group_chat_ids.values():
         await driver_groups.do(message)
     
     # == Personal Chat AI Assistant
     elif message.chat.type == "private":
-        # TODO:
-        pass
+        await ai_assistant.do(message)
     
     # == Menfess comment
     else:
