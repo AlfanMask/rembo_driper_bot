@@ -53,12 +53,12 @@ async def do(message: types.Message):
                 await bot.send_chat_action(chat_id=message.from_user.id, action="typing") # make bot is typing
                 replied_msg = None
                 if is_replying_bot:
-                    prev_context = message.reply_to_message.text
+                    prev_context = ""
                     replied_msg = await openrouter.response(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant(message_from_user, history_context, prev_context, is_admin, nickname, pref_ai_character))
                 else:
                     is_reply_from_someone = message.reply_to_message
                     if is_reply_from_someone:
-                        prev_context = message.reply_to_message.text
+                        prev_context = ""
                         replied_msg = await openrouter.response(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant(message_from_user, history_context, prev_context, is_admin, nickname, pref_ai_character))
                     else:
                         replied_msg = await openrouter.response(prompts.reply_message_from_user__ai_assistant(message_from_user, history_context, is_admin, nickname, pref_ai_character))
