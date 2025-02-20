@@ -90,11 +90,16 @@ async def do(message: types.Message):
                             logging.error("menfess_comment.do.is_replying_bot error: %s", str(e), exc_info=True)
                             await show_error(user_id)
                             return
-                
-                if replied_msg != None:
-                    await message.reply(replied_msg.text, parse_mode="Markdown")
-                    await update_history_ctx(message_from_user)
-                    await update_history_ctx(replied_msg.text)
+                try:
+                    if replied_msg != None:
+                        await message.reply(replied_msg.text, parse_mode="Markdown")
+                        await update_history_ctx(message_from_user)
+                        await update_history_ctx(replied_msg.text)
+                except Exception as e:
+                    print(f"menfess_comment.do error: {e}")
+                    logging.error("menfess_comment.do error: %s", str(e), exc_info=True)
+                    await show_error(user_id)
+                    return
     except Exception as e:
         print(f"menfess_comment.do error: {e}")
         logging.error(f"{datetime.datetime.now()} - [menfess_comment.do] Error: {e}")

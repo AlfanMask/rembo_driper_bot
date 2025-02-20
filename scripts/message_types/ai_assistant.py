@@ -81,17 +81,23 @@ async def do(message: types.Message):
                         logging.error("ai_assistant.do.!is_replying_bot.!is_reply_from_someone error: %s", str(e), exc_info=True)
                         await show_error(user_id)
                         return
+            try:
+                if replied_msg:
+                    await bot.send_message(
+                        chat_id=user_id,
+                        text=replied_msg.text,
+                        parse_mode="Markdown"
+                    )
+                    
+                # Save chats (request & response) to database
+                client.ai_assistant_messages.create.new(user_id, ai_assistant_message_type.request, message_from_user)
+                client.ai_assistant_messages.create.new(user_id, ai_assistant_message_type.response, replied_msg.text)
+            except Exception as e:
+                print(f"ai_assistant.do error: {e}")
+                logging.error("ai_assistant.do error: %s", str(e), exc_info=True)
+                await show_error(user_id)
+                return
             
-            if replied_msg:
-                await bot.send_message(
-                    chat_id=user_id,
-                    text=replied_msg.text,
-                    parse_mode="Markdown"
-                )
-                
-            # Save chats (request & response) to database
-            client.ai_assistant_messages.create.new(user_id, ai_assistant_message_type.request, message_from_user)
-            client.ai_assistant_messages.create.new(user_id, ai_assistant_message_type.response, replied_msg.text)
     except Exception as e:
         logging.error("ai_assistant.do error: %s", str(e), exc_info=True)
         print(f"ai_assistant.do error: {e}")
