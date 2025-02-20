@@ -12,3 +12,6 @@ msg_cancel_setting: Final[str] = "Kamu telah membatalkan perubahan karakter AI"
 msg_default_setting: Final[str] = f"» Setting perefencei AI dikembalikan ke default: <b>{ai_assistant_default_preference_character.default}</b>"
 def msg_success_setting(active_preference: str) -> str:
     return f"» Karakter AI Rembo telah diubah menjadi: <b>{active_preference}</b>"
+
+# AI
+error_ai_busy: Final[str] = f"<i>Ooppss, rembonya lagi cape. Butuh istirahat dulu 😴</i>"

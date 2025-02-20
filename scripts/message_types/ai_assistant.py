@@ -1,4 +1,4 @@
-import os, sys, logging, datetime
+import os, sys, logging, datetime, asyncio
 from dotenv import load_dotenv
 # Get the directory of the current script
 current_script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -14,8 +14,9 @@ from aiogram import Router, types
 # import modules
 from instances.bot import bot
 from instances.dp import dp
-from constants import lang, prompts, drivers, ai_assistant_message_type
-from scripts.instances import openrouter
+from constants import lang, prompts, drivers, ai_assistant_message_type, statuses
+# from scripts.instances import openrouter
+from scripts.instances.gemini_ai import model
 from scripts.instances.client import client
 
 # load all env variables
@@ -31,58 +32,77 @@ async def do(message: types.Message):
         is_admin = user_id == int(admin_id) or message.from_user.is_bot
         nickname = drivers.nicknames.get(user_id, "kak")
         
-        logging.debug("User ID: %d, Is Admin: %s, Nickname: %s", user_id, is_admin, nickname)
-        
         # Get message from user
         if message.text:
             message_from_user = message.text.replace(bot_usn, "")
-            logging.debug("Processed user message: %s", message_from_user)
 
             # Check if user is replying to bot
             is_replying_bot = False
             if message.reply_to_message and message.reply_to_message.from_user:
                 is_replying_bot = message.reply_to_message.from_user.username == bot_usn.replace("@", "")
             
-            logging.debug("Is replying to bot: %s", is_replying_bot)
-            
             # Get history context of last 20 chats
             history_context = client.ai_assistant_messages.get.last_20_chats_from_user_id(user_id)
-            logging.debug("History context retrieved: %s", history_context)
             
             # Get user's AI assistant preference character
             pref_ai_character = client.users.get.active_preference_ai(user_id)
-            logging.debug("User AI assistant preference: %s", pref_ai_character)
             
-            # Indicate bot is typing
+            # Indicate bot is typing + await for 2 seconds
             await bot.send_chat_action(chat_id=user_id, action="typing")
+            await asyncio.sleep(3)
             
             # Generate response using DeepSeek AI
             replied_msg = None
             if is_replying_bot:
                 prev_context = message.reply_to_message.text
-                logging.debug("Previous context in bot reply: %s", prev_context)
-                replied_msg = await openrouter.response(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant(message_from_user, history_context, prev_context, is_admin, nickname, pref_ai_character))
+                try:
+                    replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant(message_from_user, history_context, prev_context, is_admin, nickname, pref_ai_character))
+                except Exception as e:
+                    print(f"ai_assistant.do.is_replying_bot error: {e}")
+                    logging.error("ai_assistant.do.is_replying_bot error: %s", str(e), exc_info=True)
+                    await show_error(user_id)
+                    return
             else:
                 is_reply_from_someone = message.reply_to_message is not None
                 if is_reply_from_someone:
                     prev_context = message.reply_to_message.text
-                    logging.debug("Previous context from another user reply: %s", prev_context)
-                    replied_msg = await openrouter.response(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant(message_from_user, history_context, prev_context, is_admin, nickname, pref_ai_character))
+                    try:
+                        replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant(message_from_user, history_context, prev_context, is_admin, nickname, pref_ai_character))
+                    except Exception as e:
+                        print(f"ai_assistant.do.!is_replying_bot.is_reply_from_someone error: {e}")
+                        logging.error("ai_assistant.do.!is_replying_bot.is_reply_from_someone error: %s", str(e), exc_info=True)
+                        await show_error(user_id)
+                        return
                 else:
-                    replied_msg = await openrouter.response(prompts.reply_message_from_user__ai_assistant(message_from_user, history_context, is_admin, nickname, pref_ai_character))
+                    try:
+                        replied_msg = model.generate_content(prompts.reply_message_from_user__ai_assistant(message_from_user, history_context, is_admin, nickname, pref_ai_character))
+                    except Exception as e:
+                        print(f"ai_assistant.do.!is_replying_bot.!is_reply_from_someone error: {e}")
+                        logging.error("ai_assistant.do.!is_replying_bot.!is_reply_from_someone error: %s", str(e), exc_info=True)
+                        await show_error(user_id)
+                        return
             
             if replied_msg:
-                logging.info("Replying with message: %s", replied_msg)
                 await bot.send_message(
                     chat_id=user_id,
-                    text=replied_msg,
+                    text=replied_msg.text,
                     parse_mode="Markdown"
                 )
                 
             # Save chats (request & response) to database
             client.ai_assistant_messages.create.new(user_id, ai_assistant_message_type.request, message_from_user)
-            client.ai_assistant_messages.create.new(user_id, ai_assistant_message_type.response, replied_msg)
-            logging.info("Saved chat history for user %d", user_id)
+            client.ai_assistant_messages.create.new(user_id, ai_assistant_message_type.response, replied_msg.text)
     except Exception as e:
-        logging.error("driver_groups.do error: %s", str(e), exc_info=True)
-        print(f"driver_groups.do error: {e}")
+        logging.error("ai_assistant.do error: %s", str(e), exc_info=True)
+        print(f"ai_assistant.do error: {e}")
+
+async def show_error(user_id: str) -> None:
+    try:
+        await bot.send_message(
+            chat_id=user_id,
+            text=statuses.error_ai_busy,
+            parse_mode="HTML",
+        )
+    except Exception as e:
+        print(f"ai_assistant.show_error error: {e}")
+        logging.error("ai_assistant.show_error error: %s", str(e), exc_info=True)

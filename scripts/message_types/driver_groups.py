@@ -15,7 +15,7 @@ from aiogram import Router, types
 from instances.bot import bot
 from instances.dp import dp
 from constants import lang, prompts, drivers
-from instances.gemini_ai import model
+from instances import openrouter
 
 # load all env variables
 load_dotenv()
@@ -73,17 +73,17 @@ async def do(message: types.Message):
                     is_reply_from_someone = message.reply_to_message
                     if is_reply_from_someone:
                         prev_context = message.reply_to_message.text
-                        replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__driver_group(message_from_user, history_context, prev_context, is_admin, nickname, is_asking_cuaca, cuaca_result_now, cuaca_result_future))
+                        replied_msg = await openrouter.response(prompts.reply_message_from_user_on_replying_prev_context__driver_group(message_from_user, history_context, prev_context, is_admin, nickname, is_asking_cuaca, cuaca_result_now, cuaca_result_future))
                     else:
-                        replied_msg = model.generate_content(prompts.reply_message_from_user__driver_group(message_from_user, history_context, is_admin, nickname, is_asking_cuaca, cuaca_result_now, cuaca_result_future))
+                        replied_msg = await openrouter.response(prompts.reply_message_from_user__driver_group(message_from_user, history_context, is_admin, nickname, is_asking_cuaca, cuaca_result_now, cuaca_result_future))
                 elif is_replying_bot:
                     prev_context = message.reply_to_message.text
-                    replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__driver_group(message_from_user, history_context, prev_context, is_admin, nickname, is_asking_cuaca, cuaca_result_now, cuaca_result_future))
+                    replied_msg = await openrouter.response(prompts.reply_message_from_user_on_replying_prev_context__driver_group(message_from_user, history_context, prev_context, is_admin, nickname, is_asking_cuaca, cuaca_result_now, cuaca_result_future))
                 
                 if replied_msg != None:
-                    await message.reply(replied_msg.text, parse_mode="Markdown")
+                    await message.reply(replied_msg, parse_mode="Markdown")
                     await update_history_ctx(message_from_user)
-                    await update_history_ctx(replied_msg.text)
+                    await update_history_ctx(replied_msg)
     except Exception as e:
         print(f"driver_groups.do error: {e}")
         logging.error(f"{datetime.datetime.now()} - [driver_groups.do] Error: {e}")
