@@ -33,12 +33,16 @@ from scripts.instances.client import client
 async def handler_msg_reply(message: types.Message) -> None:
     try:
         if message.text:        
+            # only proceed if private (so prevent users comment on post discussion and the text is transfered here)
             # if handling input_state of this bot
             user_input_state = client.users.get.input_state_by_user_id(message.from_user.id)
             ai_assistant_input_states: list[str] = [input_state.input_setting_ref_ai]
-            if user_input_state in ai_assistant_input_states:
+            if user_input_state in ai_assistant_input_states and message.chat.type == "private":
                 await process_user_input_state(message.from_user.id, user_input_state, message.text)
                 return
+
+            # always reset input_state
+            client.users.delete.input_state_by_user_id(message.from_user.id)
             
             # MAKE 3 TYPES OF MESSAGES: Driver Group discussion, Personal Chat AI Assistent, and Menfess comment
             # == Driver Group Discussion

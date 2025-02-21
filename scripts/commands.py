@@ -59,13 +59,15 @@ async def start_command(message: Message):
 # Give Motivation Directly
 @dp.message(Command("motivation"))
 async def motivation(message: Message):
+    client.users.delete.input_state_by_user_id(user_id)
+    
     await gemini.send_motivation()
     await message.reply(text="Motivation Sent to the group!")
     
     
 # Setting Up AI Assistant Character
 @dp.message(Command("karakter"))
-async def motivation(message: Message):
+async def karakter(message: Message):
     user_id = message.from_user.id
     kb_setting = keyboards.set_setting_preference_keyboard()
     client.users.update.input_state_by_user_id(user_id, input_state.input_setting_ref_ai)
@@ -85,10 +87,11 @@ async def motivation(message: Message):
         
 # Setting Up AI Assistant Mode
 @dp.message(Command("mode"))
-async def motivation(message: Message):
+async def mode(message: Message):
     user_id = message.from_user.id
     active_mode = client.users.get.ai_mode_by_user_id(user_id)
     kb_setting = keyboards.set_setting_mode_keyboard(active_mode)
+    client.users.delete.input_state_by_user_id(user_id)
 
     try:
         await bot.send_message(
@@ -98,5 +101,5 @@ async def motivation(message: Message):
             parse_mode="HTML",
         )
     except Exception as e:
-        print(f"{datetime.datetime.now()} - ERROR - [commands.karakter] - {user_id} - {e}")
-        bot_logger.error(f"{datetime.datetime.now()} - [commands.karakter] - {user_id} - {e}")
+        print(f"{datetime.datetime.now()} - ERROR - [commands.mode] - {user_id} - {e}")
+        bot_logger.error(f"{datetime.datetime.now()} - [commands.mode] - {user_id} - {e}")
