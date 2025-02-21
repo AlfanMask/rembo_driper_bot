@@ -6,9 +6,9 @@ import os
 
 # get group_chat_ids envs
 group_chat_id_uns = os.getenv("GROUP_CHAT_ID_UNS")
-group_chat_id_uns_wa_kampusku = os.getenv("GROUP_CHAT_ID_UNS_WA_KAMPUSKU")
 group_chat_id_ums = os.getenv("GROUP_CHAT_ID_UMS")
 group_chat_id_uny = os.getenv("GROUP_CHAT_ID_UNY")
+group_chat_id_uns_wa_kampusku = os.getenv("GROUP_CHAT_ID_UNS_WA_KAMPUSKU") # added for fun group
 
 group_chat_ids: Final[dict] = {
     univs.uns: group_chat_id_uns,

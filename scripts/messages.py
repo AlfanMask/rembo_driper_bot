@@ -46,7 +46,7 @@ async def handler_msg_reply(message: types.Message) -> None:
             
             # MAKE 3 TYPES OF MESSAGES: Driver Group discussion, Personal Chat AI Assistent, and Menfess comment
             # == Driver Group Discussion
-            if f"-100{str(message.chat.id).replace('-','')}" in groups.group_chat_ids.values():
+            if f"-100{str(message.chat.id).replace('-100','').replace('-','')}" in groups.group_chat_ids.values():
                 await driver_groups.do(message)
             
             # == Personal Chat AI Assistant
