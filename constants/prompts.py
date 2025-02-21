@@ -114,7 +114,7 @@ Reply baru seseorang: {message}
 # ROLEPLAY INFORMATION
 # rolepay_information__ai_assistant: Final[str] = "Kamu bernama Rembo, kamu adalah AI Assistant yang bisa bantu belajar hingga dengerin curhatan mahasiswa Kampusku di personal chat. Kamu orang yang pintar, ceria dan lucu."
 def rolepay_information__ai_assistant_chatting(pref_ai_character: str) -> str:
-    return f"Kamu bernama Rembo, kamu adalah AI Assistant yang bisa bantu belajar hingga dengerin curhatan mahasiswa Kampusku di personal chat. Kamu mempunyai karakter {pref_ai_character}."
+    return f"Kamu bernama Rembo, kamu adalah AI Assistant yang bisa bantu belajar hingga dengerin curhatan mahasiswa Kampusku di personal chat. Kamu mempunyai karakter: {pref_ai_character}."
 rolepay_information__ai_assistant_serious: Final[str] = "Kamu adalah AI Assistant bernama Rembo, tugas kamu adalah menjawab berbagai pertanyaan mahasiswa Kampusku di personal chat Telegram. Kamu Generative AI yang ramah. Kamu menulis response text dalam format Markdown."
 reply_message_from_user_text__ai_assistant: Final[str] = f"Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan maksimal 2 emoticon."
 reply_message_from_admin_text_respectfully__ai_assistant: Final[str] = f"Tanggapilah pesan di bawah ini dengan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
@@ -122,7 +122,7 @@ reply_message_from_admin_text_respectfully__ai_assistant: Final[str] = f"Tanggap
 # functions to reply (CHATTING MODE)
 def reply_message_from_user__ai_assistant_chatting(message: str, history_context: list[str], is_admin: bool, nickname: str, pref_ai_character: str) -> str:
     is_giving_feedback_question = random.choices([True, False], weights=[30, 60], k=1)[0]
-    is_calling_nickname = random.choices([True, False], weights=[60, 30], k=1)[0]
+    is_calling_nickname = False # dont call kak
     if is_admin:
         is_calling_nickname = True
     history_content_formatted = get_context_history(history_context)
@@ -137,7 +137,7 @@ reply_message_from_user_on_replying_prev_context_text: Final[str] = f"Seseorang 
 reply_message_from_admin_on_replying_prev_context_text_respectfully: Final[str] = f"Atasan kamu me-reply komenanmu sebelumnya. Tanggapilah reply dari atasan kamu tersebut dengan memperhatikan konteks history percakapan, gunakan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan maksimal 150 huruf. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
 def reply_message_from_user_on_replying_prev_context__ai_assistant_chatting(message: str, history_context: list[str], prev_context: str, is_admin: bool, nickname: str, pref_ai_character: str) -> str:
     is_giving_feedback_question = random.choices([True, False], weights=[30, 60], k=1)[0]
-    is_calling_nickname = random.choices([True, False], weights=[60, 30], k=1)[0]
+    is_calling_nickname = False # dont call kak
     if is_admin:
         is_calling_nickname = True
     history_content_formatted = get_context_history(history_context)
