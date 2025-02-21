@@ -64,10 +64,10 @@ async def motivation(message: Message):
     
     
 # Setting Up AI Assistant Character
-@dp.message(Command("setting"))
+@dp.message(Command("karakter"))
 async def motivation(message: Message):
     user_id = message.from_user.id
-    kb_setting = keyboards.set_setting_keyboard()
+    kb_setting = keyboards.set_setting_preference_keyboard()
     client.users.update.input_state_by_user_id(user_id, input_state.input_setting_ref_ai)
 
     # send message alert to send the user_id to be deleted input_state
@@ -80,5 +80,23 @@ async def motivation(message: Message):
             parse_mode="HTML",
         )
     except Exception as e:
-        print(f"{datetime.datetime.now()} - ERROR - [commands.setting] - {user_id} - {e}")
-        bot_logger.error(f"{datetime.datetime.now()} - [commands.setting] - {user_id} - {e}")
+        print(f"{datetime.datetime.now()} - ERROR - [commands.karakter] - {user_id} - {e}")
+        bot_logger.error(f"{datetime.datetime.now()} - [commands.karakter] - {user_id} - {e}")
+        
+# Setting Up AI Assistant Mode
+@dp.message(Command("mode"))
+async def motivation(message: Message):
+    user_id = message.from_user.id
+    active_mode = client.users.get.ai_mode_by_user_id(user_id)
+    kb_setting = keyboards.set_setting_mode_keyboard(active_mode)
+
+    try:
+        await bot.send_message(
+            chat_id=user_id,
+            text=statuses.msg_setting_mode(),
+            reply_markup=kb_setting,
+            parse_mode="HTML",
+        )
+    except Exception as e:
+        print(f"{datetime.datetime.now()} - ERROR - [commands.karakter] - {user_id} - {e}")
+        bot_logger.error(f"{datetime.datetime.now()} - [commands.karakter] - {user_id} - {e}")

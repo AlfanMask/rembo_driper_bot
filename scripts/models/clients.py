@@ -11,7 +11,7 @@ from models.dataengine import Database
 from instances.db import db
 from uuid import uuid4 
 from datetime import datetime, timedelta
-from constants import lang, input_state, numbers, notif, premium_type
+from constants import lang, input_state, numbers, notif, premium_type, ai_assistant_mode
 
 class Client:
     def __init__(self, db: Database):
@@ -69,6 +69,15 @@ class Client:
                     return input_state[0]
                 return None
             
+            def ai_mode_by_user_id(user_id:str) -> str:
+                conn = db.connect()
+                cursor = conn.cursor()
+                
+                cursor.execute(f"SELECT ai_mode FROM users WHERE user_id = '{user_id}'")
+                result = cursor.fetchone()
+
+                return result[0]
+            
         # UPDATE namespace
         class update:
             def __init__(self):
@@ -91,6 +100,17 @@ class Client:
                 
                 # update input_state
                 cursor.execute(f"UPDATE users SET preference_ai = '{pref_ai}' WHERE user_id = '{user_id}'")
+                
+                # commit query
+                conn.commit()
+                conn.close()
+                
+            def mode_ai_by_user_id(user_id: str, ai_mode: ai_assistant_mode) -> None:
+                conn = db.connect()
+                cursor = conn.cursor()
+                
+                # update input_state
+                cursor.execute(f"UPDATE users SET ai_mode = '{ai_mode}' WHERE user_id = '{user_id}'")
                 
                 # commit query
                 conn.commit()
@@ -193,13 +213,13 @@ class Client:
                 self = self
                 
             # check if there are >= 5 orders that dont get driver yet
-            def new(user_id: str, message_type: str, message: str) -> bool:
+            def new(user_id: str, message_type: str, message: str, ai_mode: ai_assistant_mode) -> bool:
                 conn = db.connect()
                 cursor = conn.cursor()
                 
                 # insert
                 created_at: str = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                cursor.execute("INSERT INTO ai_assistant_messages (user_id, type, message, created_at) VALUES (%s, %s, %s, %s)", (user_id, message_type, message, created_at))
+                cursor.execute("INSERT INTO ai_assistant_messages (user_id, type, message, mode, created_at) VALUES (%s, %s, %s, %s, %s)", (user_id, message_type, message, ai_mode, created_at))
 
                 conn.commit()
                 conn.close()
@@ -209,13 +229,13 @@ class Client:
             def __init__(self):
                 self = self
                 
-            def last_20_chats_from_user_id(user_id: str) -> list[str]:
+            def last_20_chats_from_user_id(user_id: str, ai_mode: ai_assistant_mode) -> list[str]:
                 conn = db.connect()
                 cursor = conn.cursor()
                 
-                query = "SELECT message FROM ai_assistant_messages WHERE user_id = %s AND created_at BETWEEN NOW() - INTERVAL 1 HOUR AND NOW() ORDER BY id DESC LIMIT 20"
+                query = "SELECT message FROM ai_assistant_messages WHERE user_id = %s AND mode = %s AND (created_at BETWEEN NOW() - INTERVAL 1 HOUR AND NOW()) ORDER BY id DESC LIMIT 20"
                 
-                cursor.execute(query, (user_id,))
+                cursor.execute(query, (user_id,ai_mode,))
                 result = cursor.fetchall()
                 
                 # Extract messages from the result and reverse the list to get the oldest first

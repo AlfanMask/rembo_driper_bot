@@ -74,7 +74,7 @@ async def update_preference_ai(user_id: str, pref_ai: str) -> None:
 
         await bot.send_message(
             chat_id=user_id,
-            text=statuses.msg_success_setting(pref_ai),
+            text=statuses.msg_success_setting_character(pref_ai),
             parse_mode="HTML",
         )
     except Exception as e:

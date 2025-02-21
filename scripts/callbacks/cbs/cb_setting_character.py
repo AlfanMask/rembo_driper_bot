@@ -19,23 +19,23 @@ async def do(user_id: str, user_lang: lang, data: str, message_id: str) -> None:
                 chat_id=user_id,
                 message_id=message_id,
                 reply_markup=kb_close,
-                text=statuses.msg_default_setting,
+                text=statuses.msg_default_setting_character,
                 parse_mode="HTML",
             )
         except Exception as e:
-            print(f"cb_setting {e}")
-            logging.error(f"{datetime.datetime.now()} - cb_setting {e}")
+            print(f"cb_setting_character {e}")
+            logging.error(f"{datetime.datetime.now()} - cb_setting_character {e}")
     elif data == input_state.close[lang.id]:
         try:
             await bot.edit_message_text(
                 chat_id=user_id,
                 message_id=message_id,
                 reply_markup=kb_close,
-                text=statuses.msg_cancel_setting,
+                text=statuses.msg_cancel_setting_character,
             )
         except Exception as e:
-            print(f"cb_setting {e}")
-            logging.error(f"{datetime.datetime.now()} - cb_setting {e}")
+            print(f"cb_setting_character {e}")
+            logging.error(f"{datetime.datetime.now()} - cb_setting_character {e}")
     else:
         # set input_state for current user to set_age
         client.users.delete.input_state_by_user_id(user_id)
@@ -47,5 +47,5 @@ async def do(user_id: str, user_lang: lang, data: str, message_id: str) -> None:
                 parse_mode="Markdown",
             )
         except Exception as e:
-            print(f"cb_setting {e}")
-            logging.error(f"{datetime.datetime.now()} - cb_setting {e}")
+            print(f"cb_setting_character {e}")
+            logging.error(f"{datetime.datetime.now()} - cb_setting_character {e}")

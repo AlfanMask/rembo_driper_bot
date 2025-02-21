@@ -16,6 +16,7 @@ from instances.bot import bot
 from instances.dp import dp
 from constants import lang, prompts, drivers, statuses
 from instances.gemini_ai import model
+from helper import text
 
 # load all env variables
 load_dotenv()
@@ -92,7 +93,7 @@ async def do(message: types.Message):
                             return
                 try:
                     if replied_msg != None:
-                        await message.reply(replied_msg.text, parse_mode="Markdown")
+                        await message.reply(text.fix_markdown(replied_msg.text), parse_mode="Markdown")
                         await update_history_ctx(message_from_user)
                         await update_history_ctx(replied_msg.text)
                 except Exception as e:

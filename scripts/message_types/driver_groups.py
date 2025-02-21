@@ -23,7 +23,7 @@ import os
 # setup gemini ai instance
 bot_usn = os.getenv("BOT_USERNAME")
 admin_id = os.getenv("ADMIN_ID")
-from helper import weather
+from helper import weather, text
 from constants import univs, groups
 
 # messages history context: 10 of latest request (5) and response (5) data as context reference
@@ -81,7 +81,7 @@ async def do(message: types.Message):
                     replied_msg = await openrouter.response(prompts.reply_message_from_user_on_replying_prev_context__driver_group(message_from_user, history_context, prev_context, is_admin, nickname, is_asking_cuaca, cuaca_result_now, cuaca_result_future))
                 
                 if replied_msg != None:
-                    await message.reply(replied_msg, parse_mode="Markdown")
+                    await message.reply(text.fix_markdown(replied_msg), parse_mode="Markdown")
                     await update_history_ctx(message_from_user)
                     await update_history_ctx(replied_msg)
     except Exception as e:

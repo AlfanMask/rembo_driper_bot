@@ -18,10 +18,15 @@ default: Final[dict] = { lang.en: "↻ Default", lang.id: "↻ Default", lang.jw
 back: Final[dict] = { lang.en: "⬅️ back", lang.id: "⬅️ kembali", lang.jw: "⬅️ mbalek" }
 close: Final[dict] = { lang.en: "❌ Close", lang.id: "❌ Tutup", lang.jw: "❌ Tutup" }
 
+# modes
+chatting: Final[dict] = { lang.en: "💬 Chatting", lang.id: "💬 Chattingan", lang.jw: "💬 Chattingan" }
+serious: Final[dict] = { lang.en: "📖 Serious", lang.id: "📖 Serius", lang.jw: "📖 Serius" }
+
 # input_states
 input_setting_ref_ai: Final[str] = "input_setting_ref_ai"
 
 # flags
 flag_setting_pref_ai: Final[str] = "flag_setting_pref_ai"
+flag_setting_mode_ai: Final[str] = "flag_setting_mode_ai"
 
 error_input: Final[dict] = { lang.en: "❗ Error, please select the correct input", lang.id: "❗ Error, tolong masukkan input yang sesuai", lang.jw: "❗ Error, tulung lebokke input sing sesuai" }

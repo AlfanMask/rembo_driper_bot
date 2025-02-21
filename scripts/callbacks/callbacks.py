@@ -19,7 +19,7 @@ from constants import lang, input_state
 from keyboards import *
 
 # callbacks
-from callbacks.cbs import cb_setting
+from scripts.callbacks.cbs import cb_setting_character, cb_setting_mode
 
 
 # callback query using aiogram
@@ -37,7 +37,14 @@ async def callback(callback_query: types.CallbackQuery) -> None:
     
     # check flags and load the corresponding function
     if keyboard_flag == input_state.flag_setting_pref_ai:
-        await cb_setting.do(
+        await cb_setting_character.do(
+            user_id=user_id,
+            user_lang=lang.id,
+            data=cb_value,
+            message_id=message_id,            
+        )
+    elif keyboard_flag == input_state.flag_setting_mode_ai:
+        await cb_setting_mode.do(
             user_id=user_id,
             user_lang=lang.id,
             data=cb_value,
