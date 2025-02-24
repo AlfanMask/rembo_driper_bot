@@ -18,7 +18,10 @@ def msg_setting_mode() -> str:
     return f"""
 <b>» Setting Mode Rembo</b>
 
-• <b>Mode Chattingan</b> untuk rembo yang suka dengerin curhatan, cerita, hingga chat absurdmu.
+• <b>Mode Chattingan</b>
+  1) Alay. untuk rembo yang suka dengerin curhatan, cerita, hingga chat absurdmu.
+  2) Biasa. rembo jadi temen lama kamu, bisa kamu ajak chattingan kek manusia normal.
+  
 • <b>Mode Serius</b> untuk rembo yang pintar, yang bisa nemenin kamu belajar, dan ngasih jawaban apapun soal pertanyaanmu (kek AI pada umumnya)
 """
 
