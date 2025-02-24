@@ -1,4 +1,4 @@
-import os, sys, logging, datetime
+import os, sys, logging, datetime, asyncio
 from dotenv import load_dotenv
 # Get the directory of the current script
 current_script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -60,6 +60,9 @@ async def do(message: types.Message):
                 is_replying_bot = False
                 if message.reply_to_message != None:
                     is_replying_bot = True if message.reply_to_message.from_user.username == bot_usn.replace("@","") else False
+                    
+                # await for 3 seconds
+                await asyncio.sleep(3)
                     
                 # reply message using gemini AI
                 replied_msg = None

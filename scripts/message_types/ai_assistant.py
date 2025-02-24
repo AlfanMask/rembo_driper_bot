@@ -45,7 +45,7 @@ async def do(message: types.Message):
             # Get user's AI assistant preference character
             pref_ai_character = client.users.get.active_preference_ai(user_id)
             
-            # Indicate bot is typing + await for 2 seconds
+            # Indicate bot is typing + await for 3 seconds
             await bot.send_chat_action(chat_id=user_id, action="typing")
             await asyncio.sleep(3)
             
