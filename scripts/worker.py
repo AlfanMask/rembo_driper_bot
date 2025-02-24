@@ -1,20 +1,28 @@
 import logging, datetime
-from helper import gemini
+from helper import gemini, weather
 from constants import peak_hours, univs
 from instances.client import client
 
 # For ticking check alraedy more then 1H
 # for many orders dont get drivers so bot can announce to the group, but only once per hour (6 times of worker run. each worker run = 10 minutes)
-global ticking_number_worker_run
-ticking_number_worker_run: int = 0
+global ticking_number_worker_run_motivation_dont_get_drivers
+ticking_number_worker_run_motivation_dont_get_drivers: int = 0
 global is_sent_motivation_is_many_orders_dont_get_driver
 is_sent_motivation_is_many_orders_dont_get_driver: bool = False
+
+# for announcing will rain
+global ticking_number_worker_run_announce_will_rain
+ticking_number_worker_run_announce_will_rain: int = 0
+global is_sent_will_rain
+is_sent_will_rain: bool = False
 
 # worker will run every 10 minutes
 async def worker() -> None:
     try:
-        global ticking_number_worker_run
+        global ticking_number_worker_run_motivation_dont_get_drivers
         global is_sent_motivation_is_many_orders_dont_get_driver
+        global ticking_number_worker_run_announce_will_rain
+        global is_sent_will_rain
         
         # give motivation on drivers group each peak hours
         for peak_hour in peak_hours.ph_list.values():
@@ -48,16 +56,31 @@ async def worker() -> None:
         if is_many_orders_dont_get_driver and not is_sent_motivation_is_many_orders_dont_get_driver:
             await gemini.announce_many_orders_dont_get_driver()
             is_sent_motivation_is_many_orders_dont_get_driver = True
-            ticking_number_worker_run = 0
+            ticking_number_worker_run_motivation_dont_get_drivers = 0
             return
+        
+        # check if will rain -> anounce to drivers group
+        # FOR NOW: only for uns
+        (cuaca_result_now, cuaca_result_future) = await weather.get_weather_by_univ(univs.uns)
+        if "hujan" in cuaca_result_future.lower() and not is_sent_will_rain:
+            await gemini.announce_will_rain(univs.uns)
+            is_sent_will_rain = True
+            ticking_number_worker_run_announce_will_rain = 0
         
         # count how many times the worker run
         # if more then 6 times -> reset value of is_sent_motivation_is_many_orders_dont_get_driver so then able to send another motivation after already 1H
-        if ticking_number_worker_run < 6:
-            ticking_number_worker_run += 1
+        if ticking_number_worker_run_motivation_dont_get_drivers < 6:
+            ticking_number_worker_run_motivation_dont_get_drivers += 1
         else:
             is_sent_motivation_is_many_orders_dont_get_driver = False
-            ticking_number_worker_run = 0
+            ticking_number_worker_run_motivation_dont_get_drivers = 0
+
+        # if more then 18 times -> reset value of is_sent_motivation_is_many_orders_dont_get_driver so then able to send another motivation after already 3H (like on interval on BMKG data terbuka weather forecasting)
+        if ticking_number_worker_run_announce_will_rain < 18:
+            ticking_number_worker_run_announce_will_rain += 1
+        else:
+            is_sent_will_rain = False
+            ticking_number_worker_run_announce_will_rain = 0 
         
     except Exception as e:
         print(f"worker error: {e}")

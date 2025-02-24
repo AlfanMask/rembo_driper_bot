@@ -75,6 +75,13 @@ Waktu sekarang adalah: {hari}, {waktu}
 Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
 """
 
+def announce_will_rain() -> str:
+    return f"""
+{rolepay_information__driver_group}
+Berikan pengumuman informasi kalau akan hujan.
+Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
+"""
+
 # REPLYING
 cuaca_informations: Final[dict] = {
     "now": "Cuaca sekarang",

@@ -41,3 +41,16 @@ async def announce_anjem_dont_get_driver(link: str, order_msg: str, univ: univs)
     except Exception as e:
         print(f"announce_anjem_dont_get_driver error: {e}")
         logging.error(f"{datetime.datetime.now()} - Error: {e}")
+        
+async def announce_will_rain(univ: univs):
+    try:
+        response = model.generate_content(prompts.announce_will_rain())
+        await bot.send_message(
+            chat_id=groups.group_chat_ids[univ],
+            text=response.text,
+            parse_mode="Markdown",
+            request_timeout=300,
+        )
+    except Exception as e:
+        print(f"announce_many_orders_dont_get_driver error: {e}")
+        logging.error(f"{datetime.datetime.now()} - Error: {e}")

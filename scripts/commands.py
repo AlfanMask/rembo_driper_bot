@@ -59,8 +59,6 @@ async def start_command(message: Message):
 # Give Motivation Directly
 @dp.message(Command("motivation"))
 async def motivation(message: Message):
-    client.users.delete.input_state_by_user_id(user_id)
-    
     await gemini.send_motivation()
     await message.reply(text="Motivation Sent to the group!")
     
