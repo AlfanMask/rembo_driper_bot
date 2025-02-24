@@ -101,3 +101,22 @@ async def mode(message: Message):
     except Exception as e:
         print(f"{datetime.datetime.now()} - ERROR - [commands.mode] - {user_id} - {e}")
         bot_logger.error(f"{datetime.datetime.now()} - [commands.mode] - {user_id} - {e}")
+        
+# Reset AI Assistant Memory (History Context)
+@dp.message(Command("reset"))
+async def mode(message: Message):
+    user_id = message.from_user.id
+    client.users.delete.input_state_by_user_id(user_id)
+
+    try:
+        # reset memory of rembo
+        client.ai_assistant_messages.update.delete_memory_by_user_id(user_id)
+    
+        await bot.send_message(
+            chat_id=user_id,
+            text=statuses.msg_success_reset_memory,
+            parse_mode="HTML",
+        )
+    except Exception as e:
+        print(f"{datetime.datetime.now()} - ERROR - [commands.mode] - {user_id} - {e}")
+        bot_logger.error(f"{datetime.datetime.now()} - [commands.mode] - {user_id} - {e}")

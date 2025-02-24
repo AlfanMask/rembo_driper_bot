@@ -233,7 +233,7 @@ class Client:
                 conn = db.connect()
                 cursor = conn.cursor()
                 
-                query = "SELECT message FROM ai_assistant_messages WHERE user_id = %s AND mode = %s AND (created_at BETWEEN NOW() - INTERVAL 1 HOUR AND NOW()) ORDER BY id DESC LIMIT 20"
+                query = "SELECT message FROM ai_assistant_messages WHERE user_id = %s AND mode = %s AND is_resetted = 0 AND (created_at BETWEEN NOW() - INTERVAL 1 HOUR AND NOW()) ORDER BY id DESC LIMIT 20"
                 
                 cursor.execute(query, (user_id,ai_mode,))
                 result = cursor.fetchall()
@@ -245,3 +245,21 @@ class Client:
                 conn.close()
                 
                 return messages
+            
+            
+        # UPDATE namespace
+        class update:
+            def __init__(self):
+                self = self
+                
+            def delete_memory_by_user_id(user_id: str) -> list[str]:
+                conn = db.connect()
+                cursor = conn.cursor()
+                
+                query = "UPDATE ai_assistant_messages SET is_resetted = 1 WHERE user_id = %s AND is_resetted = 0"
+                
+                cursor.execute(query, (user_id,))
+                
+                # commit query
+                conn.commit()
+                conn.close()

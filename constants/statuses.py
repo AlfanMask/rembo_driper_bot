@@ -22,5 +22,8 @@ def msg_setting_mode() -> str:
 • <b>Mode Serius</b> untuk rembo yang pintar, yang bisa nemenin kamu belajar, dan ngasih jawaban apapun soal pertanyaanmu (kek AI pada umumnya)
 """
 
+# reset
+msg_success_reset_memory: Final[str] = "» Memori Rembo telah berhasil dihapuskan, selamat chat lagi dari 0 😊"
+
 # AI
 error_ai_busy: Final[str] = f"<i>Aduhh, aku lagi cape. Aku jawab ntaran yaa, mau istirahat dulu 😴</i>"
