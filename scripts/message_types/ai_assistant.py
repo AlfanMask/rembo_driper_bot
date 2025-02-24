@@ -58,7 +58,7 @@ async def do(message: types.Message):
             if is_replying_bot:
                 prev_context = message.reply_to_message.text
                 try:
-                    replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant_chatting(message_from_user, history_context, prev_context, is_admin, nickname, pref_ai_character)) if ai_mode == ai_assistant_mode.chatting else model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant_serious(message_from_user, history_context, prev_context))
+                    replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant_chatting(message_from_user, history_context, prev_context, is_admin, nickname, pref_ai_character, ai_mode)) if ai_mode in [ai_assistant_mode.chatting_fun, ai_assistant_mode.chatting_short] else model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant_serious(message_from_user, history_context, prev_context))
                 except Exception as e:
                     print(f"ai_assistant.do.is_replying_bot error: {e}")
                     logging.error("ai_assistant.do.is_replying_bot error: %s", str(e), exc_info=True)
@@ -69,7 +69,7 @@ async def do(message: types.Message):
                 if is_reply_from_someone:
                     prev_context = message.reply_to_message.text
                     try:
-                        replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant_chatting(message_from_user, history_context, prev_context, is_admin, nickname, pref_ai_character)) if ai_mode == ai_assistant_mode.chatting else model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant_serious(message_from_user, history_context, prev_context))
+                        replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant_chatting(message_from_user, history_context, prev_context, is_admin, nickname, pref_ai_character, ai_mode)) if ai_mode in [ai_assistant_mode.chatting_fun, ai_assistant_mode.chatting_short] else model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__ai_assistant_serious(message_from_user, history_context, prev_context))
                     except Exception as e:
                         print(f"ai_assistant.do.!is_replying_bot.is_reply_from_someone error: {e}")
                         logging.error("ai_assistant.do.!is_replying_bot.is_reply_from_someone error: %s", str(e), exc_info=True)
@@ -77,7 +77,7 @@ async def do(message: types.Message):
                         return
                 else:
                     try:
-                        replied_msg = model.generate_content(prompts.reply_message_from_user__ai_assistant_chatting(message_from_user, history_context, is_admin, nickname, pref_ai_character)) if ai_mode == ai_assistant_mode.chatting else model.generate_content(prompts.reply_message_from_user__ai_assistant_serious(message_from_user, history_context))
+                        replied_msg = model.generate_content(prompts.reply_message_from_user__ai_assistant_chatting(message_from_user, history_context, is_admin, nickname, pref_ai_character, ai_mode)) if ai_mode in [ai_assistant_mode.chatting_fun, ai_assistant_mode.chatting_short] else model.generate_content(prompts.reply_message_from_user__ai_assistant_serious(message_from_user, history_context))
                     except Exception as e:
                         print(f"ai_assistant.do.!is_replying_bot.!is_reply_from_someone error: {e}")
                         logging.error("ai_assistant.do.!is_replying_bot.!is_reply_from_someone error: %s", str(e), exc_info=True)

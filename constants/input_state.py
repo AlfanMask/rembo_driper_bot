@@ -19,7 +19,8 @@ back: Final[dict] = { lang.en: "⬅️ back", lang.id: "⬅️ kembali", lang.jw
 close: Final[dict] = { lang.en: "❌ Close", lang.id: "❌ Tutup", lang.jw: "❌ Tutup" }
 
 # modes
-chatting: Final[dict] = { lang.en: "💬 Chatting", lang.id: "💬 Chattingan", lang.jw: "💬 Chattingan" }
+chatting_fun: Final[dict] = { lang.en: "💬 Chatting Alay", lang.id: "💬 Chattingan Alay", lang.jw: "💬 Chattingan Alay" }
+chatting_short: Final[dict] = { lang.en: "💬 Chatting Normal", lang.id: "💬 Chattingan Biasa", lang.jw: "💬 Chattingan Biasa" }
 serious: Final[dict] = { lang.en: "📖 Serious", lang.id: "📖 Serius", lang.jw: "📖 Serius" }
 
 # input_states
