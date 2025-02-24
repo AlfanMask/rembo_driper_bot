@@ -1,4 +1,5 @@
 import logging, datetime
+from aiogram import Router, types
 from scripts.instances.bot import bot
 from scripts.instances.gemini_ai import model
 from constants import prompts, univs, groups
@@ -31,12 +32,17 @@ async def announce_many_orders_dont_get_driver():
         
 async def announce_anjem_dont_get_driver(link: str, order_msg: str, univ: univs):
     try:
+        # send to group + pin
         response = model.generate_content(prompts.anjem_dont_get_driver(order_msg.replace("#ANJEM","")))
-        await bot.send_message(
+        sent_message:types.Message = await bot.send_message(
             chat_id=groups.group_chat_ids[univ],
             text=f"{response.text}👉 {link}",
             parse_mode="Markdown",
             request_timeout=300,
+        )
+        await bot.pin_chat_message(
+            chat_id=groups.group_chat_ids[univ],
+            message_id=sent_message.message_id,
         )
     except Exception as e:
         print(f"announce_anjem_dont_get_driver error: {e}")
