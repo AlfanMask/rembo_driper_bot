@@ -8,7 +8,9 @@ async def send_motivation(peak_hour_ctx: any=None):
     try:
         response = model.generate_content(prompts.active_driver_motivation(peak_hour_ctx))
         await bot.send_message(
+            # chat_id=groups.group_chat_ids[univs.uns], # FOR NOW: only send to uns
             chat_id=groups.group_chat_ids[univs.uns], # FOR NOW: only send to uns
+            message_thread_id=2,
             text=response.text,
             parse_mode="Markdown",
             request_timeout=300,
