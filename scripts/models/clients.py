@@ -233,7 +233,7 @@ class Client:
                 conn = db.connect()
                 cursor = conn.cursor()
                 
-                query = "SELECT message FROM ai_assistant_messages WHERE user_id = %s AND mode = %s AND is_resetted = 0 AND (created_at BETWEEN NOW() - INTERVAL 1 HOUR AND NOW()) ORDER BY id DESC LIMIT 20"
+                query = "SELECT message FROM ai_assistant_messages WHERE user_id = %s AND mode = %s AND is_resetted = 0 AND (created_at BETWEEN NOW() - INTERVAL 3 HOUR AND NOW()) ORDER BY id DESC LIMIT 20"
                 
                 cursor.execute(query, (user_id,ai_mode,))
                 result = cursor.fetchall()
