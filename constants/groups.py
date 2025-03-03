@@ -16,3 +16,14 @@ group_chat_ids: Final[dict] = {
     univs.uny: group_chat_id_uny,
     "uns_wa_kampusku": group_chat_id_uns_wa_kampusku, # added for fun group
 }
+
+# get group_chat_rembo_topic_ids envs
+group_chat_id_play_rembo_uns = os.getenv("GROUP_CHAT_ID_PLAY_REMBO_UNS")
+group_chat_id_play_rembo_ums = os.getenv("GROUP_CHAT_ID_PLAY_REMBO_UMS")
+group_chat_id_play_rembo_uny = os.getenv("GROUP_CHAT_ID_PLAY_REMBO_UNY")
+
+group_chat_play_rembo_ids: Final[dict] = {
+    univs.uns: group_chat_id_play_rembo_uns,
+    univs.ums: group_chat_id_play_rembo_ums,
+    univs.uny: group_chat_id_play_rembo_uny,
+}

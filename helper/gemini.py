@@ -8,9 +8,8 @@ async def send_motivation(peak_hour_ctx: any=None):
     try:
         response = model.generate_content(prompts.active_driver_motivation(peak_hour_ctx))
         await bot.send_message(
-            # chat_id=groups.group_chat_ids[univs.uns], # FOR NOW: only send to uns
             chat_id=groups.group_chat_ids[univs.uns], # FOR NOW: only send to uns
-            message_thread_id=2,
+            message_thread_id=groups.group_chat_play_rembo_ids[univs.uns],
             text=response.text,
             parse_mode="Markdown",
             request_timeout=300,
@@ -24,6 +23,7 @@ async def announce_many_orders_dont_get_driver():
         response = model.generate_content(prompts.many_orders_dont_get_driver())
         sent_message:types.Message = await bot.send_message(
             chat_id=groups.group_chat_ids[univs.uns], # FOR NOW: only send to uns
+            message_thread_id=groups.group_chat_play_rembo_ids[univs.uns],
             text=response.text,
             parse_mode="Markdown",
             request_timeout=300,
@@ -42,6 +42,7 @@ async def announce_anjem_dont_get_driver(link: str, order_msg: str, univ: univs)
         response = model.generate_content(prompts.anjem_dont_get_driver(order_msg.replace("#ANJEM","")))
         sent_message:types.Message = await bot.send_message(
             chat_id=groups.group_chat_ids[univ],
+            message_thread_id=groups.group_chat_play_rembo_ids[univ],
             text=f"{response.text}👉 {link}",
             parse_mode="Markdown",
             request_timeout=300,
@@ -59,6 +60,7 @@ async def announce_will_rain(univ: univs):
         response = model.generate_content(prompts.announce_will_rain())
         await bot.send_message(
             chat_id=groups.group_chat_ids[univ],
+            message_thread_id=groups.group_chat_play_rembo_ids[univ],
             text=response.text,
             parse_mode="Markdown",
             request_timeout=300,
