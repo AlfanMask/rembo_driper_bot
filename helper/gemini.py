@@ -20,11 +20,15 @@ async def send_motivation(peak_hour_ctx: any=None):
 async def announce_many_orders_dont_get_driver():
     try:
         response = model.generate_content(prompts.many_orders_dont_get_driver())
-        await bot.send_message(
+        sent_message:types.Message = await bot.send_message(
             chat_id=groups.group_chat_ids[univs.uns], # FOR NOW: only send to uns
             text=response.text,
             parse_mode="Markdown",
             request_timeout=300,
+        )
+        await bot.pin_chat_message(
+            chat_id=groups.group_chat_ids[univs.uns],
+            message_id=sent_message.message_id,
         )
     except Exception as e:
         print(f"announce_many_orders_dont_get_driver error: {e}")
