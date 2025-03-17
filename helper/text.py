@@ -11,4 +11,7 @@ def fix_markdown(text):
     # Replace double spaces with a single space
     text = text.replace('  ', ' ')
 
+    # Replace double newline with a single newline
+    text = text.replace('\n\n\n', '\n\n')
+
     return text
