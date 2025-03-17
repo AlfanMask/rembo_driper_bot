@@ -61,7 +61,7 @@ def many_orders_dont_get_driver():
 {rolepay_information__driver_group}
 {motivation_many_orders_dont_get_driver_text}
 Waktu sekarang adalah: {hari}, {waktu}
-Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
+Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan singkat dan jelas.
 """
 
 motivation_anjem_dont_get_driver: Final[str] = "Di grup orderan antar jemput (anjem) yang belum diambil oleh driver. Berikan pesan semangat kepada para driver lainnya untuk online dan segera mengambil orderan tersebut."
@@ -72,14 +72,14 @@ def anjem_dont_get_driver(order_msg: str):
 {motivation_anjem_dont_get_driver}
 Pesan orderan: {order_msg}
 Waktu sekarang adalah: {hari}, {waktu}
-Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
+Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan singkat dan jelas.
 """
 
 def announce_will_rain() -> str:
     return f"""
 {rolepay_information__driver_group}
 Berikan pengumuman informasi kalau akan hujan.
-Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan maksimal 250 huruf.
+Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan singkat dan jelas.
 """
 
 # REPLYING
