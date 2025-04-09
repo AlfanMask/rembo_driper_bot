@@ -78,8 +78,8 @@ Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter.
 def announce_will_rain() -> str:
     return f"""
 {rolepay_information__driver_group}
-Berikan pengumuman informasi kalau akan hujan.
-Gunakan bahasa lucu dan lugas seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan singkat dan jelas, seperti chat singkat dengan teman, maksimal 50 huruf.
+Berikan pengumuman informasi kalau akan terjadi hujan dalam beberapa saat. Beri semangat kepada driver dan selalu hati-hati di jalan.
+Gunakan bahasa lugas dan sedih karena mau hujan seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan singkat dan jelas, seperti chat singkat dengan teman, maksimal 50 huruf.
 """
 
 # REPLYING
