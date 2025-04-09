@@ -59,9 +59,6 @@ async def do(message: types.Message):
                 # get message from user
                 message_from_user = message.text.replace(bot_usn, "")
 
-                # get post context so AI know what is he mentioned to if needed
-                post_context = message.reply_to_message.text or message.reply_to_message.caption or "" if post_context == "" else post_context
-
                 # check if user answering message from bot
                 is_replying_bot = False
                 if message.reply_to_message != None:
@@ -73,6 +70,9 @@ async def do(message: types.Message):
                 # reply message using gemini AI
                 replied_msg = None
                 if (bot_usn in message.text):
+                    # get post context so AI know what is he mentioned to if needed
+                    post_context = message.reply_to_message.text or message.reply_to_message.caption or "" if post_context == "" else post_context
+                    
                     is_reply_from_someone = message.reply_to_message
                     if is_reply_from_someone:
                         try:
