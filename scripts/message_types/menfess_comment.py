@@ -71,7 +71,7 @@ async def do(message: types.Message):
                 replied_msg = None
                 if (bot_usn in message.text):
                     # get post context so AI know what is he mentioned to if needed
-                    post_context = message.reply_to_message.text or message.reply_to_message.caption or "" if post_context == "" else post_context
+                    post_context = message.reply_to_message.text or message.reply_to_message.caption
                     
                     is_reply_from_someone = message.reply_to_message
                     if is_reply_from_someone:
