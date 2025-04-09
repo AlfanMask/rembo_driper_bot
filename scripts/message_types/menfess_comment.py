@@ -70,8 +70,12 @@ async def do(message: types.Message):
                 # reply message using gemini AI
                 replied_msg = None
                 if (bot_usn in message.text):
-                    # get post context so AI know what is he mentioned to if needed
-                    post_context = message.reply_to_message.text or message.reply_to_message.caption
+                    # IF MENTION bot but not replying someone comment (not same discussion with someone else reply) => on new post
+                    if message.reply_to_message.from_user.id == 777000: # THIS IS TELEGRAM ID by default, when not replying to anyone
+                        # get post context so AI know what is he mentioned to if needed
+                        post_context = message.reply_to_message.text or message.reply_to_message.caption
+                        # remove history context
+                        history_context = []
                     
                     is_reply_from_someone = message.reply_to_message
                     if is_reply_from_someone:
