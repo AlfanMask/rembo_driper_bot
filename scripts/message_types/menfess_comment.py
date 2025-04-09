@@ -1,4 +1,6 @@
 import os, sys, logging, datetime, asyncio
+from aiogram import Bot
+import requests
 from dotenv import load_dotenv
 # Get the directory of the current script
 current_script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -32,14 +34,18 @@ global history_context
 history_context: list[str] = []
 global last_update_history
 last_update_history = datetime.datetime.now()
+global post_context # TODO: next make feature to handles multiple te3xt post_context so able to do discussion on multiple posts while saving the post context
+post_context = ""
 
 async def do(message: types.Message):
     try:
-        # if last_update_history > 5 minutes -> clear history_context
+        # if last_update_history > 5 minutes -> clear history_context & clean post_context
         global history_context
         global last_update_history
+        global post_context
         if datetime.datetime.now() - last_update_history > datetime.timedelta(minutes=5):
             history_context = []
+            post_context = ""
         
         message_type: str = message.chat.type
         is_admin = True if (message.from_user.id == int(admin_id) or message.from_user.is_bot) else False
@@ -54,7 +60,7 @@ async def do(message: types.Message):
                 message_from_user = message.text.replace(bot_usn, "")
 
                 # get post context so AI know what is he mentioned to if needed
-                post_context = message.reply_to_message.text or message.reply_to_message.caption or ""
+                post_context = message.reply_to_message.text or message.reply_to_message.caption or "" if post_context == "" else post_context
 
                 # check if user answering message from bot
                 is_replying_bot = False
@@ -70,7 +76,7 @@ async def do(message: types.Message):
                     is_reply_from_someone = message.reply_to_message
                     if is_reply_from_someone:
                         try:
-                            prev_context = message.reply_to_message.text
+                            prev_context = None # because mentioning someone so no prev context
                             replied_msg = model.generate_content(prompts.reply_message_from_user_on_replying_prev_context__menfess_comment(message_from_user, history_context, prev_context, is_admin, nickname, post_context))
                         except Exception as e:
                             print(f"menfess_comment.do.[bot_usn in message.text].is_reply_from_someone error: {e}")

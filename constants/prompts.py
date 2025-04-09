@@ -180,8 +180,8 @@ Prompt: {message}
 ### === MENFESS COMMENT === ###
 # ROLEPLAY INFORMATION
 rolepay_information__menfess_comment: Final[str] = "Kamu bernama Rembo, kamu adalah admin di grup internal driver Kampusku, seorang netizen yang aktif di forum Menfess Kampusku, dan AI Assistant yang bisa bantu belajar hingga dengerin curhatan mahasiswa Kampusku di personal chat. Kamu orang yang ceria dan lucu. Kamu bermain sosial media twitter berbahasa Indonesia."
-reply_message_from_user_text__menfess_comment: Final[str] = f"{rolepay_information__menfess_comment}. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan singkat dan jelas. Gunakan maksimal 2 emoticon."
-reply_message_from_admin_text_respectfully__menfess_comment: Final[str] = f"{rolepay_information__menfess_comment}. Tanggapilah pesan di bawah ini dengan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan singkat dan jelas. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
+reply_message_from_user_text__menfess_comment: Final[str] = f"{rolepay_information__menfess_comment}. Jawab komenan dari seseorang di bawah ini berdasarkan konteks postingan. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan singkat dan jelas seperti chat singkat dengan teman. Gunakan maksimal 2 emoticon."
+reply_message_from_admin_text_respectfully__menfess_comment: Final[str] = f"{rolepay_information__menfess_comment}. Jawab komenan dari atasan kamu di bawah ini berdasarkan konteks postingan. Tanggapilah pesan di bawah ini dengan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Jangan gunakan hashtag apapun. Jangan menyebut mbo. Tanggapi dengan singkat dan jelas. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri."
 
 # functions to reply
 def reply_message_from_user__menfess_comment(message: str, history_context: list[str], is_admin: bool, nickname: str, post_context: str) -> str:
@@ -197,20 +197,21 @@ Kamu di-mention oleh seseorang di kolom komentar postingan, konteks isi postinga
 Pesan: {message}
 {dont_repeat_question_from_user}
 Jangan tulis kata 'mbo' atau 'Rembo'. Jangan menyebut nama seseorang.
+Jawab reply dari seseorng tersebut berdasarkan konteks postingan dan percakapan.
 """
-reply_message_from_user_on_replying_prev_context_text: Final[str] = f"{rolepay_information__menfess_comment}. Seseorang me-reply komenanmu sebelumnya. Tanggapilah reply dari orang tersebut dengan memperhatikan konteks history percakapan. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan singkat dan jelas. Gunakan maksimal 2 emoticon."
-reply_message_from_admin_on_replying_prev_context_text_respectfully: Final[str] = f"{rolepay_information__menfess_comment}. Atasan kamu me-reply komenanmu sebelumnya. Tanggapilah reply dari atasan kamu tersebut dengan memperhatikan konteks history percakapan, gunakan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan singkat dan jelas. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
-def reply_message_from_user_on_replying_prev_context__menfess_comment(message: str, history_context: list[str], prev_context: str, is_admin: bool, nickname: str, post_context: str) -> str:
+reply_message_from_user_on_replying_prev_context_text: Final[str] = f"{rolepay_information__menfess_comment}. Jawab reply dari seseorang tersebut berdasarkan konteks postingan awal dan percakapan. Tanggapilah pesan di bawah ini sebagai manusia dengan jawaban lucu atau marah apabila diperlukan. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan singkat dan jelas seperti chat singkat dengan teman. Gunakan maksimal 2 emoticon."
+reply_message_from_admin_on_replying_prev_context_text_respectfully: Final[str] = f"{rolepay_information__menfess_comment}. Jawab reply dari atasan kamu di bawah ini berdasarkan konteks postingan dan percakapan, gunakan bahasa yang sopan karena berbicara dengan atasan. Sebut atasan dengan bos. Gunakan bahasa indonesia yang lugas bahasa seperti orang-orang indonesia di platform twitter. Tanggapi dengan singkat dan jelas. Gunakan emot 🙏 jika diperlukan. Gunakan kata saya untuk meyebut diri kamu sendiri. Gunakan maksimal 2 emoticon."
+def reply_message_from_user_on_replying_prev_context__menfess_comment(message: str, history_context: list[str], prev_context: str|None, is_admin: bool, nickname: str, post_context: str) -> str:
     is_giving_feedback_question = random.choices([True, False], weights=[30, 60], k=1)[0]
     is_calling_nickname = random.choices([True, False], weights=[60, 30], k=1)[0]
     if is_admin:
         is_calling_nickname = True
     history_content_formatted = get_context_history(history_context)
     return f"""
-{reply_message_from_admin_on_replying_prev_context_text_respectfully if is_admin else reply_message_from_user_on_replying_prev_context_text}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
-{f'Konteks history percakapan: {history_content_formatted}. Pesan kamu yang di-reply seseorang: {prev_context}.' if {len(history_context) > 0} else f'Konteks komen kamu sebelumnya: {prev_context}'}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
 Kamu di-mention oleh seseorang di kolom komentar postingan, konteks isi postingan: '{post_context}'
 Reply baru seseorang: {message}
+{reply_message_from_admin_on_replying_prev_context_text_respectfully if is_admin else reply_message_from_user_on_replying_prev_context_text}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
+{f'Konteks history percakapan: {history_content_formatted}.' if {len(history_context) > 0} else ''}.{f'Pesan kamu yang di-reply seseorang: {prev_context}.' if {prev_context} else ''}{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
 {dont_repeat_question_from_user}
 Jangan tulis kata 'mbo' atau 'Rembo'. Jangan menyebut nama seseorang.
 """
