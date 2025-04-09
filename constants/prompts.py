@@ -40,9 +40,9 @@ reply_message_from_admin_text_respectfully__driver_group: Final[str] = f"{rolepa
 motivation_text_default: Final[str] = "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang dan mengantarkan makanan."
 motivation_text_ctx_by_peak_hour: Final[dict] = {
     ph_list["a"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang berangkat kuliah dan mengantarkan sarapan.",
-    # ph_list["b"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang berangkat kuliah dan menjemput seseorang dari kuliah.",
+    ph_list["b"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang berangkat kuliah dan menjemput seseorang dari kuliah.",
     ph_list["c"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang berangkat kuliah dan mengantarkan makan siang.",
-    # ph_list["d"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang berangkat kuliah dan menjemput seseorang dari kuliah.",
+    ph_list["d"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan seseorang berangkat kuliah dan menjemput seseorang dari kuliah.",
     ph_list["e"]: "Berikan pesan semangat kepada para driver lainnya untuk mengambil orderan mengantarkan makan malam.",
 }
 motivation_many_orders_dont_get_driver_text: Final[str] = "Di grup ada banyak orderan yang belum diambil oleh driver. Berikan pesan semangat kepada para driver lainnya untuk online dan segera mengambil orderan tersebut."
