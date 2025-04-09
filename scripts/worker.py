@@ -27,7 +27,7 @@ async def worker() -> None:
         # give motivation on drivers group each peak hours
         for peak_hour in peak_hours.ph_list.values():
             start_time = datetime.datetime.combine(datetime.datetime.today(), peak_hour)
-            end_time = start_time + datetime.timedelta(minutes=10)
+            end_time = start_time + datetime.timedelta(minutes=5)
             if is_now_between(start_time, end_time):
                 await gemini.send_motivation(peak_hour)
                 return #stop the function so not giving multiple motivation as below
@@ -69,14 +69,14 @@ async def worker() -> None:
         
         # count how many times the worker run
         # if more then 6 times -> reset value of is_sent_motivation_is_many_orders_dont_get_driver so then able to send another motivation after already 1H
-        if ticking_number_worker_run_motivation_dont_get_drivers < 6:
+        if ticking_number_worker_run_motivation_dont_get_drivers < 12:
             ticking_number_worker_run_motivation_dont_get_drivers += 1
         else:
             is_sent_motivation_is_many_orders_dont_get_driver = False
             ticking_number_worker_run_motivation_dont_get_drivers = 0
 
         # if more then 18 times -> reset value of is_sent_motivation_is_many_orders_dont_get_driver so then able to send another motivation after already 3H (like on interval on BMKG data terbuka weather forecasting)
-        if ticking_number_worker_run_announce_will_rain < 18:
+        if ticking_number_worker_run_announce_will_rain < 36:
             ticking_number_worker_run_announce_will_rain += 1
         else:
             is_sent_will_rain = False

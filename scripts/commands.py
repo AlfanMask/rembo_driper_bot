@@ -39,7 +39,7 @@ async def tick_counter():
         
         # run worker function
         # reset ticking_number_in_second
-        if ticking_number_in_second >= 600:
+        if ticking_number_in_second >= 300:
             await worker()
             ticking_number_in_second = 0
             
