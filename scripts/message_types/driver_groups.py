@@ -68,8 +68,11 @@ async def do(message: types.Message):
                     is_replying_bot = True if message.reply_to_message.from_user.username == bot_usn.replace("@","") else False
                     
                 # Indicate bot is typing for 5 seconds
-                msg_thread_id_rembo:int = int(groups.group_chat_play_rembo_ids[user_univ])
-                await bot.send_chat_action(chat_id=user_group_id, action="typing", message_thread_id=msg_thread_id_rembo)
+                try:
+                    msg_thread_id_rembo:int = int(groups.group_chat_play_rembo_ids[user_univ])
+                    await bot.send_chat_action(chat_id=user_group_id, action="typing", message_thread_id=msg_thread_id_rembo)
+                except Exception as e:
+                    print(e)
                     
                 # reply message using gemini AI
                 replied_msg = None
