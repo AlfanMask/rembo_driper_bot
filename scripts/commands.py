@@ -54,7 +54,7 @@ async def start_command(message: Message):
     if ticking_task is None:
         ticking_task = asyncio.create_task(tick_counter())
     
-    await message.answer("Haloo, Rembo di sini kukuruyuukk..")
+    await message.answer(statuses.start_information())
     
 # Give Motivation Directly
 @dp.message(Command("motivation"))

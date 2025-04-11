@@ -1,6 +1,19 @@
 from typing import Final
 from constants import lang, ai_assistant_default_preference_character, ai_assistant_mode
 
+# default
+def start_information() -> str:
+    return """
+Haloo, Rembo di sini kukuruyuukk...
+
+Rembo punya fitur:
+/mode: untuk mengganti mode AI
+/karakter: untuk menambahkan karakter AI kamu sendiri
+/reset: untuk reset memori AI dan ngobrol dari awal lagi
+
+Selamat chattingan dengan rembo 😊
+"""
+
 # setting character
 def msg_setting_character(active_preference: str) -> str:
     return f"""
