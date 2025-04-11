@@ -85,11 +85,19 @@ async def do(message: types.Message):
                         return
             try:
                 if replied_msg:
-                    await bot.send_message(
-                        chat_id=user_id,
-                        text=text.fix_markdown(replied_msg.text),
-                        parse_mode="Markdown"
-                    )
+                    try:
+                        await bot.send_message(
+                            chat_id=user_id,
+                            text=text.fix_markdown(replied_msg.text),
+                            parse_mode="Markdown"
+                        )
+                    except Exception as e:
+                        if "can't parse entities" in str(e):
+                            await bot.send_message(
+                                chat_id=user_id,
+                                text=replied_msg.text,
+                                parse_mode="HTML"
+                            )
                     
                 # Save chats (request & response) to database
                 client.ai_assistant_messages.create.new(user_id, ai_assistant_message_type.request, message_from_user, ai_mode)
