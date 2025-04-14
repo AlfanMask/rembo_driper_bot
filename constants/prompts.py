@@ -154,9 +154,10 @@ def reply_message_from_user_on_replying_prev_context__ai_assistant_chatting(mess
     history_content_formatted = get_context_history(history_context)
     return f"""
 {rolepay_information__ai_assistant_chatting(pref_ai_character)}
-Seseorang me-reply komenanmu sebelumnya.{reply_message_from_admin_text_respectfully__ai_assistant[ai_mode] if is_admin else reply_message_from_user_text__ai_assistant[ai_mode]}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
-{f'Perhatikan konteks history percakapan. Konteks history percakapan: {history_content_formatted}. Pesan kamu yang di-reply seseorang: {prev_context}.' if {len(history_context) > 0} else f'Konteks komen kamu sebelumnya: {prev_context}'}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
+Pesan kamu yang di-reply seseorang: {prev_context}.
 Reply baru seseorang: {message}
+Seseorang me-reply komenanmu sebelumnya.{reply_message_from_admin_text_respectfully__ai_assistant[ai_mode] if is_admin else reply_message_from_user_text__ai_assistant[ai_mode]}{give_question_feedback_text if is_giving_feedback_question else dont_give_question_feedback_text}
+{f'Perhatikan konteks history percakapan. Konteks history percakapan: {history_content_formatted}'}.{f'{call_user_nickname}`{nickname}`' if is_calling_nickname and nickname != None and not is_admin else ""}
 {dont_repeat_question_from_user}
 """
 # functions to reply (SERIOUS MODE)
