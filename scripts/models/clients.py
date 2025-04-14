@@ -229,11 +229,12 @@ class Client:
             def __init__(self):
                 self = self
                 
-            def last_20_chats_from_user_id(user_id: str, ai_mode: ai_assistant_mode) -> list[str]:
+            # get chat context of the last 1 day so able to continue the chat with users
+            def last_30_chats_from_user_id(user_id: str, ai_mode: ai_assistant_mode) -> list[str]:
                 conn = db.connect()
                 cursor = conn.cursor()
                 
-                query = "SELECT message FROM ai_assistant_messages WHERE user_id = %s AND mode = %s AND is_resetted = 0 AND (created_at BETWEEN NOW() - INTERVAL 3 HOUR AND NOW()) ORDER BY id DESC LIMIT 20"
+                query = "SELECT message FROM ai_assistant_messages WHERE user_id = %s AND mode = %s AND is_resetted = 0 AND (created_at BETWEEN NOW() - INTERVAL 24 HOUR AND NOW()) ORDER BY id DESC LIMIT 30"
                 
                 cursor.execute(query, (user_id,ai_mode,))
                 result = cursor.fetchall()

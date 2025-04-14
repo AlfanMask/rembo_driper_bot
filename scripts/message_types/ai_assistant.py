@@ -53,7 +53,7 @@ async def do(message: types.Message):
             replied_msg = None
 
             ai_mode: ai_assistant_mode = client.users.get.ai_mode_by_user_id(user_id)
-            history_context = client.ai_assistant_messages.get.last_20_chats_from_user_id(user_id, ai_mode)
+            history_context = client.ai_assistant_messages.get.last_30_chats_from_user_id(user_id, ai_mode)
             
             if is_replying_bot:
                 prev_context = message.reply_to_message.text
