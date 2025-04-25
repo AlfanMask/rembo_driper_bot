@@ -15,7 +15,7 @@ client = OpenAI(
 
 async def response(prompt: str) -> str:
     completion = client.chat.completions.create(
-        model="google/gemini-2.0-flash-thinking-exp-1219:free",
+        model="google/gemini-2.0-flash-001", # not free, but has limit
         messages=[
             {
             "role": "user",
