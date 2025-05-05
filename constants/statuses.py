@@ -43,3 +43,7 @@ msg_success_reset_memory: Final[str] = "» Memori Rembo telah berhasil dihapuska
 
 # AI
 error_ai_busy: Final[str] = f"<i>Aduhh, aku lagi cape. Aku jawab ntaran yaa, mau istirahat dulu 😴</i>"
+
+# bot tasks
+kick_drivers_inactive_start: str = "Okee bos, saya cek dulu siapa yang ga aktif dalam 3 bulan terakhir, nanti saya kick satu-satu 😊🙏"
+kick_drivers_inactive_end: str = "Udahh selesai bos, bisa dicek jumlah member di grup ini sudah berkurang 🙏"

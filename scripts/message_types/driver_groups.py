@@ -15,7 +15,7 @@ from aiogram import Router, types
 from instances.bot import bot
 from instances.dp import dp
 from constants import lang, prompts, drivers
-from instances import openrouter
+from instances import openrouter, client
 
 # load all env variables
 load_dotenv()
@@ -23,8 +23,10 @@ import os
 # setup gemini ai instance
 bot_usn = os.getenv("BOT_USERNAME")
 admin_id = os.getenv("ADMIN_ID")
+uns_group_chat_id = os.getenv("GROUP_CHAT_ID_UNS")
+
 from helper import weather, text
-from constants import univs, groups
+from constants import univs, groups, statuses
 
 # messages history context: 10 of latest request (5) and response (5) data as context reference
 global history_context
@@ -77,6 +79,13 @@ async def do(message: types.Message):
                 # reply message using gemini AI
                 replied_msg = None
                 if (bot_usn in message.text):
+                    # if admin ask rembo to kick drivers inactive
+                    if is_admin and "kick driver" in message.text:
+                        await message.reply(statuses.kick_drivers_inactive_start, parse_mode="Markdown")
+                        await kick_drivers_inactive()
+                        await message.reply(statuses.kick_drivers_inactive_end, parse_mode="Markdown")
+                        return
+                    
                     is_reply_from_someone = message.reply_to_message
                     if is_reply_from_someone:
                         prev_context = message.reply_to_message.text
@@ -108,3 +117,16 @@ async def update_history_ctx(text: str) -> None:
         
     # update history timestamp
     last_update_history = datetime.datetime.now()
+    
+    
+async def kick_drivers_inactive() -> None:
+    inactive_driver_ids = client.client.drivers.get.driver_ids_of_inactive_drivers()
+    for driver_id in inactive_driver_ids:
+        try:
+            await bot.ban_chat_member(chat_id=uns_group_chat_id, user_id=driver_id, request_timeout=300) # FOR NOW, only for UNS is enough
+            await asyncio.sleep(0.1)
+        except Exception as e:
+            # if flood exceeded -> pause for 30s
+            print(e)
+            if "Flood control exceeded" in str(e):
+                await asyncio.sleep(30)

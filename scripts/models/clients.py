@@ -264,3 +264,26 @@ class Client:
                 # commit query
                 conn.commit()
                 conn.close()
+                
+                
+    # DRIVER namepsace
+    class drivers:
+        def __init__(self):
+            self = self
+                
+        # GET (read) namespace
+        class get:
+            def __init__(self):
+                self = self
+                
+            # check if there are >= 5 orders that dont get driver yet
+            def driver_ids_of_inactive_drivers() -> bool:
+                conn = db.connect()
+                cursor = conn.cursor()
+                
+                cursor.execute(f"SELECT driver_id FROM drivers WHERE is_active = 0")
+                driver_ids: list[str] = [driver[0] for driver in cursor.fetchall()]
+                
+                if len(driver_ids) > 0:
+                    return driver_ids
+                return False
