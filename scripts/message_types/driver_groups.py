@@ -127,6 +127,6 @@ async def kick_drivers_inactive() -> None:
             await asyncio.sleep(0.1)
         except Exception as e:
             # if flood exceeded -> pause for 30s
-            print(e)
+            print(f"{e}: {driver_id}")
             if "Flood control exceeded" in str(e):
                 await asyncio.sleep(30)
