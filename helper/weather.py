@@ -34,6 +34,30 @@ async def get_weather_by_univ(univ: univs) -> tuple[str, str]:
     except Exception as e:
         print(f"{e}: error getting weather from weather bmkg data terbuka")
         return None
+    
+async def get_weather_when_stop_rain_by_univ(univ: univs) -> str:
+    try:
+        now = datetime.datetime.now()
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"{url}{kode_lokasi_univ.codes[univ]}") as response:
+                response_data = await response.json()
+                if response.status == 200:
+                    cuacas = response_data["data"][0]["cuaca"][0]
+
+                    for i, cuaca in enumerate(cuacas):
+                        local_dt = datetime.datetime.fromisoformat(cuaca["local_datetime"])
+
+                        # get if not rain
+                        if "hujan" in cuaca['weather_desc'].lower():
+                            continue
+                        else:
+                            cuaca_result_not_rain = f"{local_dt.year}-{local_dt.month}-{local_dt.day} {local_dt.hour:02}-{local_dt.minute:02}-{local_dt.second:02}: {cuaca['weather_desc']}"
+                            return cuaca_result_not_rain
+
+        return None
+    except Exception as e:
+        print(f"{e}: error getting weather from weather bmkg data terbuka")
+        return None
         
 def check_current_cuaca(now: str, check_datetime) -> str:
     # Parse the strings into datetime objects

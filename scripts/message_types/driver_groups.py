@@ -55,8 +55,12 @@ async def do(message: types.Message):
         cuaca_result_future: tuple[str, str|None] = ["",""]
         user_group_id = message.chat.id
         user_univ = next((key for key, value in groups.group_chat_ids.items() if value == str(user_group_id)), None)
-        if "cuaca" in message.text:
+        if "cuaca" in message.text and "reda" not in message.text:
             (cuaca_result_now, cuaca_result_future) = await weather.get_weather_by_univ(user_univ)
+            is_asking_cuaca = True
+        
+        if "reda" in message.text:
+            cuaca_result_future = await weather.get_weather_when_stop_rain_by_univ(user_univ)
             is_asking_cuaca = True
         
         if message_type in ["group", "supergroup"]:
