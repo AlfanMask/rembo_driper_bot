@@ -1,4 +1,5 @@
 from datetime import datetime
+import locale
 
 def get_day_time_indonesian() -> tuple[str, str]:
     # Map English day names to Indonesian
@@ -30,3 +31,8 @@ def get_day_time_indonesian() -> tuple[str, str]:
         waktu_hari = "malam"
     
     return (hari_indonesia, waktu_hari)
+
+def get_indonesian_format(dt: datetime) -> str:
+    locale.setlocale(locale.LC_TIME, "id_ID.UTF-8")  # For Linux/macOS. On Windows, try "indonesian"
+    readable = dt.strftime("%A, %-d %B %Y pukul %H:%M")
+    return readable

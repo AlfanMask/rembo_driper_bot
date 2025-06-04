@@ -51,8 +51,8 @@ async def do(message: types.Message):
             
         # check if asking for weahter information
         is_asking_cuaca: bool = False
-        cuaca_result_now = ""
-        cuaca_result_future = ""
+        cuaca_result_now: tuple[str, str|None] = ["",""]
+        cuaca_result_future: tuple[str, str|None] = ["",""]
         user_group_id = message.chat.id
         user_univ = next((key for key, value in groups.group_chat_ids.items() if value == str(user_group_id)), None)
         if "cuaca" in message.text:

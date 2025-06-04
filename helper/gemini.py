@@ -55,9 +55,9 @@ async def announce_anjem_dont_get_driver(link: str, order_msg: str, univ: univs)
         print(f"announce_anjem_dont_get_driver error: {e}")
         logging.error(f"{datetime.datetime.now()} - Error: {e}")
         
-async def announce_will_rain(univ: univs):
+async def announce_will_rain(univ: univs, cuaca_result_future: str):
     try:
-        response = model.generate_content(prompts.announce_will_rain())
+        response = model.generate_content(prompts.announce_will_rain(cuaca_result_future))
         await bot.send_message(
             chat_id=groups.group_chat_ids[univ],
             message_thread_id=groups.group_chat_play_rembo_ids[univ],

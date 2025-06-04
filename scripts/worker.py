@@ -63,7 +63,7 @@ async def worker() -> None:
         # FOR NOW: only for uns
         (cuaca_result_now, cuaca_result_future) = await weather.get_weather_by_univ(univs.uns)
         if "hujan" in cuaca_result_future.lower() and not is_sent_will_rain:
-            await gemini.announce_will_rain(univs.uns)
+            await gemini.announce_will_rain(univs.uns, cuaca_result_future)
             is_sent_will_rain = True
             ticking_number_worker_run_announce_will_rain = 0
         
