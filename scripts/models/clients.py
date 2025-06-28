@@ -281,7 +281,7 @@ class Client:
                 conn = db.connect()
                 cursor = conn.cursor()
                 
-                cursor.execute(f"SELECT driver_id FROM drivers WHERE is_active = 0")
+                cursor.execute(f"SELECT drivers.driver_id FROM drivers JOIN users ON drivers.driver_id = users.user_id WHERE drivers.is_active = 0 AND users.premium_driver_to IS NULL;")
                 driver_ids: list[str] = [driver[0] for driver in cursor.fetchall()]
                 
                 if len(driver_ids) > 0:
